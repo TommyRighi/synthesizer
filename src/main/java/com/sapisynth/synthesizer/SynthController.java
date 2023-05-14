@@ -3,7 +3,7 @@ package com.sapisynth.synthesizer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class SynthController {
     @FXML
     private Label welcomeText;
 
