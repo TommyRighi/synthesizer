@@ -1,16 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.sapisynth.synthesizer.SynthController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sapisynth.synthesizer.SynthController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Effects">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Save preset">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Load preset">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <AnchorPane prefHeight="475.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+         <children>
+            <RadioButton layoutX="110.0" layoutY="22.0" mnemonicParsing="false" text="Oscillator 1" />
+            <ComboBox layoutX="76.0" layoutY="53.0" prefWidth="150.0" />
+            <Slider layoutX="78.0" layoutY="380.0" />
+            <Label layoutX="128.0" layoutY="357.0" text="Volume" />
+            <ComboBox layoutX="76.0" layoutY="94.0" prefHeight="25.0" prefWidth="65.0" />
+            <ComboBox layoutX="158.0" layoutY="94.0" prefHeight="25.0" prefWidth="65.0" />
+            <Slider layoutX="81.0" layoutY="329.0" max="50.0" min="-50.0" />
+            <Label layoutX="138.0" layoutY="306.0" text="Pan" />
+         </children>
+      </AnchorPane>
+   </left>
+   <center>
+      <AnchorPane prefHeight="425.0" prefWidth="257.0" BorderPane.alignment="CENTER">
+         <children>
+            <RadioButton layoutX="110.0" layoutY="26.0" mnemonicParsing="false" text="Oscillator 2" />
+            <ComboBox layoutX="76.0" layoutY="56.0" prefWidth="150.0" />
+            <Slider layoutX="81.0" layoutY="382.0" />
+            <Label layoutX="131.0" layoutY="359.0" text="Volume" />
+            <ComboBox layoutX="79.0" layoutY="95.0" prefHeight="25.0" prefWidth="65.0" />
+            <ComboBox layoutX="161.0" layoutY="95.0" prefHeight="25.0" prefWidth="65.0" />
+            <Slider layoutX="82.0" layoutY="330.0" max="50.0" min="-50.0" />
+            <Label layoutX="139.0" layoutY="307.0" text="Pan" />
+         </children>
+      </AnchorPane>
+   </center>
+   <right>
+      <AnchorPane prefHeight="475.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+         <children>
+            <RadioButton layoutX="107.0" layoutY="29.0" mnemonicParsing="false" text="Oscillator 3" />
+            <ComboBox layoutX="75.0" layoutY="60.0" prefWidth="150.0" />
+            <Slider layoutX="80.0" layoutY="383.0" />
+            <Label layoutX="130.0" layoutY="360.0" text="Volume" />
+            <ComboBox layoutX="77.0" layoutY="98.0" prefHeight="25.0" prefWidth="65.0" />
+            <ComboBox layoutX="159.0" layoutY="98.0" prefHeight="25.0" prefWidth="65.0" />
+            <Slider layoutX="81.0" layoutY="325.0" max="50.0" min="-50.0" />
+            <Label layoutX="138.0" layoutY="302.0" text="Pan" />
+         </children>
+      </AnchorPane>
+   </right>
+   <bottom>
+      <AnchorPane prefHeight="200.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+         <children>
+            <Slider layoutX="738.0" layoutY="165.0" />
+            <Label layoutX="788.0" layoutY="142.0" text="Master" />
+            <Slider layoutX="737.0" layoutY="111.0" />
+            <Label layoutX="787.0" layoutY="88.0" text="Attack" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
