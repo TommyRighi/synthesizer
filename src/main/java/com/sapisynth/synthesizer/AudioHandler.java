@@ -14,34 +14,61 @@ public class AudioHandler {
 
 
 
-        Mixer mixer = getMixer(mixers[0]);
+        Line[] outputLines;
+/*
+        Mixer mixer = null;
+        for (Mixer.Info i : mixers) {
+            try {
+                mixer = getMixer(i);
+            }
+            catch (Exception e) {
+                System.out.println("Mixer" + i.getName() + "non disponibile");
+            }
+        }
+*/
+        Mixer mixer;
 
-        Line outputLine;
+        //Line.Info[] lineInfo = mixer.getSourceLineInfo();
+
+
+
+
+        for (Mixer.Info i : mixers) {
+            mixer = getMixer(i);
+
+            System.out.println(i.getName());
+            System.out.println(i.getDescription());
+
+
+
+
+            Line.Info[] linesInfo = mixer.getSourceLineInfo();
+            for (Line.Info j : linesInfo) {
+                System.out.println("\t" + j.toString());
+            }
+
+            System.out.println();
+            System.out.println();
+        }
+
+/*
         try {
-            outputLine = mixer.getLine(mixer.getLineInfo());
+            chosenLine.open();
+        } catch (LineUnavailableException e) {
+            System.out.println("Errore apertura line");
+        }
+        System.out.println(chosenLine.isOpen());
+
+        try {
+            outputLines = mixer.getSourceLines();
         }
         catch (Exception e) {
             System.out.println("Errore");
             return;
         }
 
-        if (!outputLine.isOpen()) {
-            try {
-                outputLine.open();
-            }
-            catch (Exception e)
-            {
-                System.out.println("Errore");
-                return;
-            }
-        }
+ */
 
-
-        Control[] lineControls = outputLine.getControls();
-
-        for (Control i : lineControls) {
-            System.out.println(i.toString());
-        }
 
     }
 
