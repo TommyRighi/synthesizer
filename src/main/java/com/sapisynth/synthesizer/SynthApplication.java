@@ -1,7 +1,6 @@
 package com.sapisynth.synthesizer;
 
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,7 +18,7 @@ public class SynthApplication extends Application {
         stage.show();
 
 
-        AudioHandler audio = new AudioHandler();
+
     }
 
     public static void main(String[] args) {
