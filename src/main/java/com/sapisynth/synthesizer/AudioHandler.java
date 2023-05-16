@@ -7,8 +7,9 @@ import javax.sound.sampled.*;
 
 public class AudioHandler {
 
-    static final int BUFFER_SIZE = 256;
+    static final int BUFFER_SIZE = 512;
     static final int SAMPLE_RATE = 48000;
+    static int pitch = 440;
 
 
 
@@ -126,48 +127,89 @@ public class AudioHandler {
     AudioHandler() {
 
 
-        byte[] sineWave = new byte[BUFFER_SIZE];
-
-        for (int i = 0; i < BUFFER_SIZE; i++) {
-            sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((2 * Math.PI * 500) / SAMPLE_RATE * i));
-            if (sineWave[i] > 0) {
-                sineWave[i] = Byte.MAX_VALUE;
-            }
-            else {
-                sineWave[i] = - Byte.MAX_VALUE;
-            }
-        }
-
-        for (byte i : sineWave) {
-            System.out.println(i);
-        }
-
-
 
         Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
-        Mixer mixer = AudioSystem.getMixer(mixerInfo[4]);
+        for (Mixer.Info i : mixerInfo) {
+            System.out.println(i.getName());
+            System.out.println(i.getDescription() + "\n");
+        }
 
+        //Pc portatile
+        //Mixer mixer = AudioSystem.getMixer(mixerInfo[4]);
 
+        //Pc fisso
+        Mixer mixer = AudioSystem.getMixer(mixerInfo[6]);
 
+        AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
-        AudioFormat audioFormat = null;
-        audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
         try {
             DataLine.Info LineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
-            final SourceDataLine sourceLine = (SourceDataLine)mixer.getLine(LineInfo);
-            sourceLine.open();
+            final SourceDataLine sourceLineSine = (SourceDataLine)mixer.getLine(LineInfo);
+            sourceLineSine.open();
 
-            Thread sourceAudioThread = new Thread(() -> {
 
-                sourceLine.start();
+            Thread sourceAudioThreadSine = new Thread(() -> {
+
+                sourceLineSine.start();
+
+                byte[] sineWave = new byte[BUFFER_SIZE];
+                double wavePos = 0;
 
                 while (true) {
-                    sourceLine.write(sineWave,0, BUFFER_SIZE);
+
+                    for (int i = 0; i < BUFFER_SIZE; i++) {
+                        sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((Math.PI * pitch) / SAMPLE_RATE * wavePos++ / 2));
+                    }
+
+                    sourceLineSine.write(sineWave,0, BUFFER_SIZE);
+
                 }
             });
 
-            sourceAudioThread.start();
+
+
+            final SourceDataLine sourceLineSquare = (SourceDataLine)mixer.getLine(LineInfo);
+            sourceLineSquare.open();
+
+            Thread sourceAudioThreadSquare = new Thread(() -> {
+
+                sourceLineSquare.start();
+
+                byte[] sineWave = new byte[BUFFER_SIZE];
+                double wavePos = 0;
+
+                while (true) {
+
+                    for (int i = 0; i < BUFFER_SIZE; i++) {
+                        sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((Math.PI * pitch) / SAMPLE_RATE * wavePos++ / 2));
+                        if (sineWave[i] < 0) {
+                            sineWave[i] = Byte.MAX_VALUE;
+                        }
+                        else {
+                            sineWave[i] = -Byte.MAX_VALUE;
+                        }
+                    }
+
+                    sourceLineSquare.write(sineWave,0, BUFFER_SIZE);
+
+                }
+            });
+
+
+            FloatControl panCtrlSine = (FloatControl) sourceLineSine.getControl(FloatControl.Type.PAN);
+            FloatControl gainCtrlSine = (FloatControl) sourceLineSquare.getControl(FloatControl.Type.MASTER_GAIN);
+            panCtrlSine.setValue(1);
+            gainCtrlSine.setValue(6);
+            sourceAudioThreadSine.start();
+
+            FloatControl panCtrlSquare = (FloatControl) sourceLineSquare.getControl(FloatControl.Type.PAN);
+            FloatControl gainCtrlSquare = (FloatControl) sourceLineSquare.getControl(FloatControl.Type.MASTER_GAIN);
+            panCtrlSquare.setValue(-1);
+            gainCtrlSquare.setValue(-10);
+            sourceAudioThreadSquare.start();
+
+
         } catch (LineUnavailableException e) {
             e.printStackTrace();
             System.out.println("Linea non disponibile");
