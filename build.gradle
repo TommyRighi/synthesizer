@@ -6,7 +6,7 @@ plugins {
     id 'org.beryx.jlink' version '2.25.0'
 }
 
-group 'com.sApiSynth'
+group 'com.righit'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -25,8 +25,8 @@ tasks.withType(JavaCompile) {
 }
 
 application {
-    mainModule = 'com.sapisynth.synthesizer'
-    mainClass = 'com.sapisynth.synthesizer.HelloApplication'
+    mainModule = 'com.righit.synthesizer'
+    mainClass = 'com.righit.synthesizer.HelloApplication'
 }
 
 javafx {

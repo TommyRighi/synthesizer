@@ -1,4 +1,4 @@
-package com.sapisynth.synthesizer;
+package com.righit.synthesizer;
 
 
 import javax.sound.sampled.*;
@@ -135,10 +135,10 @@ public class AudioHandler {
         }
 
         //Pc portatile
-        //Mixer mixer = AudioSystem.getMixer(mixerInfo[4]);
+        Mixer mixer = AudioSystem.getMixer(mixerInfo[4]);
 
         //Pc fisso
-        Mixer mixer = AudioSystem.getMixer(mixerInfo[6]);
+        //Mixer mixer = AudioSystem.getMixer(mixerInfo[6]);
 
         AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
@@ -203,11 +203,18 @@ public class AudioHandler {
             gainCtrlSine.setValue(6);
             sourceAudioThreadSine.start();
 
+
+
+
             FloatControl panCtrlSquare = (FloatControl) sourceLineSquare.getControl(FloatControl.Type.PAN);
             FloatControl gainCtrlSquare = (FloatControl) sourceLineSquare.getControl(FloatControl.Type.MASTER_GAIN);
             panCtrlSquare.setValue(-1);
             gainCtrlSquare.setValue(-10);
             sourceAudioThreadSquare.start();
+
+
+
+
 
 
         } catch (LineUnavailableException e) {

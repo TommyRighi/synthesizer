@@ -4,6 +4,6 @@ module com.sapisynth.synthesizer {
     requires java.desktop;
 
 
-    opens com.sapisynth.synthesizer to javafx.fxml;
-    exports com.sapisynth.synthesizer;
+    opens com.righit.synthesizer to javafx.fxml;
+    exports com.righit.synthesizer;
 }

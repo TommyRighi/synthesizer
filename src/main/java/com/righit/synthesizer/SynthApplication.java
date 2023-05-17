@@ -1,4 +1,4 @@
-package com.sapisynth.synthesizer;
+package com.righit.synthesizer;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
