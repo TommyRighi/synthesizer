@@ -6,42 +6,53 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 
+import java.awt.event.ActionEvent;
+import java.util.Arrays;
+
 public class SynthController {
 
     @FXML private ComboBox<String> WaveTableSelector1;
-    @FXML private ComboBox<String> WaveTableSelector2;
-    @FXML private ComboBox<String> WaveTableSelector3;
     @FXML private ComboBox<Integer> nVoiceSelector1;
-    @FXML private ComboBox<Integer> nVoiceSelector2;
-    @FXML private ComboBox<Integer> nVoiceSelector3;
     @FXML private RadioButton oscillatorSwitch1;
-    @FXML private RadioButton oscillatorSwitch2;
-    @FXML private RadioButton oscillatorSwitch3;
     @FXML private Slider panControl1;
-    @FXML private Slider panControl2;
-    @FXML private Slider panControl3;
     @FXML private Slider volumeControl1;
-    @FXML private Slider volumeControl2;
-    @FXML private Slider volumeControl3;
     @FXML private LineChart<Integer, Byte> waveTableVisualizer1;
+
+    @FXML private ComboBox<String> WaveTableSelector2;
+    @FXML private ComboBox<Integer> nVoiceSelector2;
+    @FXML private RadioButton oscillatorSwitch2;
+    @FXML private Slider panControl2;
+    @FXML private Slider volumeControl2;
     @FXML private LineChart<Integer, Byte> waveTableVisualizer2;
+
+
+    @FXML private ComboBox<String> WaveTableSelector3;
+    @FXML private ComboBox<Integer> nVoiceSelector3;
+    @FXML private RadioButton oscillatorSwitch3;
+    @FXML private Slider panControl3;
+    @FXML private Slider volumeControl3;
     @FXML private LineChart<Integer, Byte> waveTableVisualizer3;
 
 
+    @FXML private ComboBox<String> audioInterfaceSelector;
+    @FXML private ComboBox<String> midiInterfaceSelector;
+
+
+    AudioHandler audioHandler;
+    MidiHandler provaMidi;
+
     @FXML
     void initialize() {
-        //AudioHandler prova = new AudioHandler();
-
+        audioHandler = new AudioHandler();
 
         waveTableSelectorInitialization();
-
         nVoicesSelectorInitialization();
-
         oscillatorSwitchInitialization();
-
         panControlInitialization();
-
         volumeControlInitialiation();
+
+        audioInterfaceSelectorInitialization();
+
 
     }
 
@@ -107,6 +118,17 @@ public class SynthController {
         volumeControl2.adjustValue(70);
 
         volumeControl3.adjustValue(70);
+
+    }
+
+    void audioInterfaceSelectorInitialization() {
+        String[] arrayMixers = audioHandler.getMixersNames();
+
+        audioInterfaceSelector.getItems().removeAll(audioInterfaceSelector.getItems());
+        audioInterfaceSelector.getItems().addAll(arrayMixers);
+    }
+
+    @FXML void changeMixer(ActionEvent event) {
 
     }
 

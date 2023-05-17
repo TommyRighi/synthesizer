@@ -9,9 +9,10 @@ public class AudioHandler {
 
     static final int BUFFER_SIZE = 512;
     static final int SAMPLE_RATE = 48000;
-    static int pitch = 440;
 
-
+    public String[] mixersNames;
+    public Mixer.Info[] mixerInfo;
+    public Mixer mixer;
 
 /*  Funzione di prova 1
     AudioHandler() {
@@ -126,23 +127,23 @@ public class AudioHandler {
 
     AudioHandler() {
 
+        mixerInfo = AudioSystem.getMixerInfo();
+        AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
 
-        Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
-        for (Mixer.Info i : mixerInfo) {
-            System.out.println(i.getName());
-            System.out.println(i.getDescription() + "\n");
+        mixersNames = new String[mixerInfo.length];
+        for (int i = 0; i < mixerInfo.length; i++) {
+            mixersNames[i] = mixerInfo[i].getName();
         }
 
         //Pc portatile
-        Mixer mixer = AudioSystem.getMixer(mixerInfo[4]);
+        //Mixer mixer = AudioSystem.getMixer(mixerInfo[4]);
 
         //Pc fisso
         //Mixer mixer = AudioSystem.getMixer(mixerInfo[6]);
 
-        AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
-
+/*
         try {
             DataLine.Info LineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
             final SourceDataLine sourceLineSine = (SourceDataLine)mixer.getLine(LineInfo);
@@ -159,7 +160,7 @@ public class AudioHandler {
                 while (true) {
 
                     for (int i = 0; i < BUFFER_SIZE; i++) {
-                        sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((Math.PI * pitch) / SAMPLE_RATE * wavePos++ / 2));
+                        sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((Math.PI * 120) / SAMPLE_RATE * wavePos++ / 2));
                     }
 
                     sourceLineSine.write(sineWave,0, BUFFER_SIZE);
@@ -182,7 +183,7 @@ public class AudioHandler {
                 while (true) {
 
                     for (int i = 0; i < BUFFER_SIZE; i++) {
-                        sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((Math.PI * pitch) / SAMPLE_RATE * wavePos++ / 2));
+                        sineWave[i] = (byte)(Byte.MAX_VALUE * Math.sin((Math.PI * 60) / SAMPLE_RATE * wavePos++ / 2));
                         if (sineWave[i] < 0) {
                             sineWave[i] = Byte.MAX_VALUE;
                         }
@@ -222,14 +223,24 @@ public class AudioHandler {
             System.out.println("Linea non disponibile");
         }
 
-
-
+ */
 
 
 
     }
 
+    public void setMixer(String nome) {
+        for (Mixer.Info i : mixerInfo) {
+            if (i.getName() == nome) {
+                mixer = AudioSystem.getMixer(i);
+            }
+        }
+    }
 
+
+    public String[] getMixersNames(){
+        return mixersNames;
+    }
 
 
 }
