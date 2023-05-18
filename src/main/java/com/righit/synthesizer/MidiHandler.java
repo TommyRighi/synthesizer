@@ -8,14 +8,18 @@ public class MidiHandler {
     public MidiDevice.Info[] midiInfo;
     public String[] midisNames;
     public MidiReceiver receiver;
+    public AudioHandler audioHandler;
+    public AudioTracker tracker = new AudioTracker();
 
 
-    public MidiHandler() {
+    public MidiHandler(AudioHandler audioHandler) {
+
+        this.audioHandler = audioHandler;
 
         midiInfo = MidiSystem.getMidiDeviceInfo();
         midisNames = new String[midiInfo.length];
         for (int i = 0; i < midiInfo.length; i++) {
-            midisNames[i] = midiInfo[1].getName();
+            midisNames[i] = midiInfo[i].getName();
         }
 
 
@@ -33,33 +37,16 @@ public class MidiHandler {
             }
         }
 
-
-/*
-        try {
-            midiDevice = MidiSystem.getMidiDevice(midiInfo[5]);
-
-            List<Transmitter> transmitters = midiDevice.getTransmitters();
-
-            for (Transmitter i : transmitters) {
-
-                //i.setReceiver();
-
-            }
-
-        } catch (MidiUnavailableException e) {
-            System.out.println("Device non disponibile");
-            e.printStackTrace();
-        }
-*/
-
-
-
-
     }
+
+
+
 
     public String[] getMidisNames(){
         return midisNames;
     }
+
+
 
     public void setMidi(String chosenMidiName) {
 
@@ -81,31 +68,21 @@ public class MidiHandler {
         try {
             Transmitter transmitter = midiDevice.getTransmitter();
 
-            transmitter.setReceiver(receiver);
+            if (midiDevice.isOpen()) {
+                receiver = new MidiReceiver(audioHandler, tracker);
+
+                System.out.println("Il transmitter è: " + transmitter.toString());
+                transmitter.setReceiver(receiver);
+
+                transmitter.getReceiver();
+                System.out.println();
+            }
+
 
         } catch (MidiUnavailableException e) {
+            System.out.println("Errore unavaiacvdasg");
             e.printStackTrace();
         }
-    }
-
-
-
-    void temp() {
-
-
-        Sequencer sequencer;
-
-
-        try {
-            sequencer = MidiSystem.getSequencer();
-            sequencer.getReceiver();
-        } catch (MidiUnavailableException e) {
-            e.printStackTrace();
-        }
-
-
-
-
     }
 
 

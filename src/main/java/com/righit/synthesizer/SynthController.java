@@ -42,7 +42,7 @@ public class SynthController {
     @FXML
     void initialize() {
         audioHandler = new AudioHandler();
-        midiHandler = new MidiHandler();
+        midiHandler = new MidiHandler(audioHandler);
 
         waveTableSelectorInitialization();
         nVoicesSelectorInitialization();
