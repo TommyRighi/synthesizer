@@ -46,9 +46,6 @@ public class MidiReceiver implements Receiver {
 
             }
 
-
-
-
         }
 
         
