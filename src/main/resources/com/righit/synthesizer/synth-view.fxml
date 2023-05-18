@@ -132,8 +132,11 @@
             <Label layoutX="787.0" layoutY="88.0" text="Attack" />
             <ComboBox fx:id="audioInterfaceSelector" layoutX="678.0" layoutY="14.0" prefWidth="150.0" />
             <ComboBox fx:id="midiInterfaceSelector" layoutX="678.0" layoutY="46.0" prefWidth="150.0" />
-            <Button layoutX="845.0" layoutY="14.0" mnemonicParsing="false" text="Ok" />
-            <Button layoutX="845.0" layoutY="46.0" mnemonicParsing="false" text="Ok" />
+            <Button layoutX="845.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#changeMixer" text="Ok" />
+            <Button layoutX="845.0" layoutY="46.0" mnemonicParsing="false" onMouseClicked="#changeMidi" text="Ok" />
+            <Label layoutX="589.0" layoutY="18.0" text="Audio Output" />
+            <Label layoutX="592.0" layoutY="50.0" prefHeight="17.0" prefWidth="67.0" text="Midi Input" />
+            <Button layoutX="343.0" layoutY="99.0" mnemonicParsing="false" text="Debugging" />
          </children>
       </AnchorPane>
    </bottom>

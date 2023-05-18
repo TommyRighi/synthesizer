@@ -1,4 +1,4 @@
-Distorsioni da implementareà
+Distorsioni da implementare
 
 Questi algoritmi funzionano con il segnale che va da -1 a 1
 

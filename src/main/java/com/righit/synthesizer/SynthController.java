@@ -5,9 +5,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
-
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
+import javafx.scene.input.MouseEvent;
 
 public class SynthController {
 
@@ -39,11 +37,12 @@ public class SynthController {
 
 
     AudioHandler audioHandler;
-    MidiHandler provaMidi;
+    MidiHandler midiHandler;
 
     @FXML
     void initialize() {
         audioHandler = new AudioHandler();
+        midiHandler = new MidiHandler();
 
         waveTableSelectorInitialization();
         nVoicesSelectorInitialization();
@@ -52,6 +51,7 @@ public class SynthController {
         volumeControlInitialiation();
 
         audioInterfaceSelectorInitialization();
+        midiInterfaceSelectorInitialization();
 
 
     }
@@ -124,12 +124,33 @@ public class SynthController {
     void audioInterfaceSelectorInitialization() {
         String[] arrayMixers = audioHandler.getMixersNames();
 
+
         audioInterfaceSelector.getItems().removeAll(audioInterfaceSelector.getItems());
         audioInterfaceSelector.getItems().addAll(arrayMixers);
     }
 
-    @FXML void changeMixer(ActionEvent event) {
+    void midiInterfaceSelectorInitialization() {
+        String[] arrayMidis = midiHandler.getMidisNames();
 
+        midiInterfaceSelector.getItems().removeAll(midiInterfaceSelector.getItems());
+        midiInterfaceSelector.getItems().addAll(arrayMidis);
+    }
+
+    @FXML void changeMixer(MouseEvent mouseEvent) {
+        String mixerName = audioInterfaceSelector.getSelectionModel().getSelectedItem();
+
+        if (mixerName != "") {
+            audioHandler.setMixer(mixerName);
+        }
+    }
+
+
+    @FXML void changeMidi(MouseEvent event) {
+        String midiName = midiInterfaceSelector.getSelectionModel().getSelectedItem();
+
+        if (midiName != "") {
+            midiHandler.setMidi(midiName);
+        }
     }
 
 }

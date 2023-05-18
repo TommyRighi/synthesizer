@@ -13,6 +13,7 @@ public class AudioHandler {
     public String[] mixersNames;
     public Mixer.Info[] mixerInfo;
     public Mixer mixer;
+    AudioFormat audioFormat;
 
 /*  Funzione di prova 1
     AudioHandler() {
@@ -128,7 +129,7 @@ public class AudioHandler {
     AudioHandler() {
 
         mixerInfo = AudioSystem.getMixerInfo();
-        AudioFormat audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
+        audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
 
         mixersNames = new String[mixerInfo.length];
@@ -231,10 +232,13 @@ public class AudioHandler {
 
     public void setMixer(String nome) {
         for (Mixer.Info i : mixerInfo) {
-            if (i.getName() == nome) {
+            if (i.getName().equals(nome)) {
                 mixer = AudioSystem.getMixer(i);
             }
         }
+
+        //Debugging
+        System.out.println(mixer.getMixerInfo().getName());
     }
 
 
