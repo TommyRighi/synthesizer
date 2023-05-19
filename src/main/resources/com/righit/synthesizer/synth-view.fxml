@@ -52,8 +52,8 @@
             <ComboBox fx:id="nVoiceSelector1" layoutX="44.0" layoutY="120.0" prefHeight="25.0" prefWidth="65.0" />
             <Slider fx:id="panControl1" layoutX="81.0" layoutY="385.0" max="50.0" min="-50.0" />
             <Label layoutX="43.0" layoutY="384.0" text="Pan" />
-            <Slider layoutX="151.0" layoutY="126.0" prefHeight="14.0" prefWidth="53.0" />
-            <Slider layoutX="207.0" layoutY="113.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
+            <Slider fx:id="spreadControl1" layoutX="151.0" layoutY="126.0" max="5.0" prefHeight="14.0" prefWidth="53.0" />
+            <Slider fx:id="blendControl1" layoutX="207.0" layoutY="113.0" max="10.0" min="-10.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
             <LineChart fx:id="waveTableVisualizer1" alternativeRowFillVisible="false" axisSortingPolicy="NONE" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="77.0" layoutY="183.0" legendSide="TOP" legendVisible="false" prefHeight="160.0" prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
@@ -82,8 +82,8 @@
             <ComboBox fx:id="nVoiceSelector2" layoutX="45.0" layoutY="122.0" prefHeight="25.0" prefWidth="65.0" />
             <Slider fx:id="panControl2" layoutX="81.0" layoutY="387.0" max="50.0" min="-50.0" />
             <Label layoutX="33.0" layoutY="385.0" prefWidth="20.0" text="Pan" />
-            <Slider layoutX="151.0" layoutY="128.0" prefHeight="14.0" prefWidth="53.0" />
-            <Slider layoutX="207.0" layoutY="115.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
+            <Slider fx:id="spreadControl2" layoutX="151.0" layoutY="128.0" max="5.0" prefHeight="14.0" prefWidth="53.0" />
+            <Slider fx:id="blendControl2" layoutX="207.0" layoutY="115.0" max="10.0" min="-10.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
             <LineChart fx:id="waveTableVisualizer2" alternativeRowFillVisible="false" axisSortingPolicy="NONE" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="77.0" layoutY="183.0" legendSide="TOP" legendVisible="false" prefHeight="160.0" prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
                <xAxis>
                   <CategoryAxis side="BOTTOM" />
@@ -112,8 +112,8 @@
             <ComboBox fx:id="nVoiceSelector3" layoutX="46.0" layoutY="124.0" prefHeight="25.0" prefWidth="65.0" />
             <Slider fx:id="panControl3" layoutX="78.0" layoutY="382.0" max="50.0" min="-50.0" />
             <Label layoutX="34.0" layoutY="381.0" text="Pan" />
-            <Slider layoutX="150.0" layoutY="130.0" prefHeight="14.0" prefWidth="53.0" />
-            <Slider layoutX="206.0" layoutY="123.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
+            <Slider fx:id="spreadControl3" layoutX="150.0" layoutY="130.0" max="5.0" prefHeight="14.0" prefWidth="53.0" />
+            <Slider fx:id="blendControl3" layoutX="206.0" layoutY="123.0" max="10.0" min="-10.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
             <LineChart fx:id="waveTableVisualizer3" alternativeRowFillVisible="false" axisSortingPolicy="NONE" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="76.0" layoutY="175.0" legendSide="TOP" legendVisible="false" prefHeight="160.0" prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
                <xAxis>
                   <CategoryAxis side="BOTTOM" />
@@ -135,9 +135,9 @@
    <bottom>
       <AnchorPane prefHeight="200.0" prefWidth="900.0" BorderPane.alignment="CENTER">
          <children>
-            <Slider layoutX="738.0" layoutY="165.0" />
+            <Slider fx:id="masterVolume" layoutX="738.0" layoutY="165.0" />
             <Label layoutX="788.0" layoutY="142.0" text="Master" />
-            <Slider layoutX="737.0" layoutY="111.0" />
+            <Slider fx:id="masterAttack" layoutX="737.0" layoutY="111.0" />
             <Label layoutX="787.0" layoutY="88.0" text="Attack" />
             <ComboBox fx:id="audioInterfaceSelector" layoutX="678.0" layoutY="14.0" prefWidth="150.0" />
             <ComboBox fx:id="midiInterfaceSelector" layoutX="678.0" layoutY="46.0" prefWidth="150.0" />
@@ -145,7 +145,8 @@
             <Button layoutX="845.0" layoutY="46.0" mnemonicParsing="false" onMouseClicked="#changeMidi" text="Ok" />
             <Label layoutX="589.0" layoutY="18.0" text="Audio Output" />
             <Label layoutX="592.0" layoutY="50.0" prefHeight="17.0" prefWidth="67.0" text="Midi Input" />
-            <Button layoutX="343.0" layoutY="99.0" mnemonicParsing="false" text="Debugging" />
+            <Button layoutX="589.0" layoutY="99.0" mnemonicParsing="false" onMouseClicked="#update" prefHeight="37.0" prefWidth="127.0" text="Activate Preset" />
+            <Button layoutX="589.0" layoutY="141.0" mnemonicParsing="false" onMouseClicked="#initPreset" prefHeight="37.0" prefWidth="127.0" text="Init Preset" />
          </children>
       </AnchorPane>
    </bottom>

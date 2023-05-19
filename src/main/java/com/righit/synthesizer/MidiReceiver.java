@@ -6,13 +6,15 @@ public class MidiReceiver implements Receiver {
 
     public AudioHandler audioHandler;
     AudioTracker tracker;
+    SoundProperties soundProperties;
 
 
-    public MidiReceiver(AudioHandler audioHandler, AudioTracker tracker) {
+    public MidiReceiver(AudioHandler audioHandler, AudioTracker tracker, SoundProperties soundProperties) {
         super();
 
         this.audioHandler = audioHandler;
         this.tracker = tracker;
+        this.setSoundProperties(soundProperties);
     }
 
     @Override
@@ -20,7 +22,8 @@ public class MidiReceiver implements Receiver {
 
 
 
-        if (message.getMessage().length > 1) {
+        if (message.getMessage().length > 1 /*&& (message.getMessage()[0] == -128 || message.getMessage()[0] == - 112)*/) {
+
             System.out.println(timeStamp);
             for (byte s : message.getMessage()) {
                 System.out.println(s);
@@ -29,11 +32,30 @@ public class MidiReceiver implements Receiver {
 
 
             if (message.getMessage()[2] != 0) {
-                SoundOutput nota = new SoundOutput(audioHandler, message.getMessage()[1]);
 
-                nota.start();
+                for (int i = 0; i < soundProperties.N_OSCILLATORS; i++) {
 
-                tracker.addThread(nota.hashCode(), nota);
+                    if (soundProperties.getActiveOscillators()[i]) {
+
+                        for (int j = 0; j < soundProperties.getnVoices()[j]; j++) {
+
+                            SoundOutput nota = new SoundOutput(audioHandler, message.getMessage()[1]);
+
+                            nota.setPan(soundProperties.getPans()[i] + (j * Math.pow(-1, j) * soundProperties.getSpread()[i]));
+                            nota.setVolume(((soundProperties.masterVolume - soundProperties.getVolumes()[i] - (j * Math.pow(-1, j) * soundProperties.getBlend()[i])) / soundProperties.getnVoices()[i]) / soundProperties.N_OSCILLATORS);
+                            nota.setWave(soundProperties.waveTable[i]);
+                            nota.setPitch(((double) (message.getMessage()[1] - 69) /12) + (j * Math.pow(-1, j)));
+
+                            nota.start();
+
+                            tracker.addThread(nota.hashCode(), nota);
+
+                        }
+
+                    }
+
+                }
+
             }
             else {
 
@@ -54,6 +76,10 @@ public class MidiReceiver implements Receiver {
     @Override
     public void close() {
 
+    }
+
+    void setSoundProperties(SoundProperties soundProperties) {
+        this.soundProperties = soundProperties;
     }
 
 

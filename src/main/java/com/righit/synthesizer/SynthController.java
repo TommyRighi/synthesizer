@@ -12,6 +12,8 @@ public class SynthController {
     @FXML private ComboBox<String> WaveTableSelector1;
     @FXML private ComboBox<Integer> nVoiceSelector1;
     @FXML private RadioButton oscillatorSwitch1;
+    @FXML private Slider blendControl1;
+    @FXML private Slider spreadControl1;
     @FXML private Slider panControl1;
     @FXML private Slider volumeControl1;
     @FXML private LineChart<Integer, Byte> waveTableVisualizer1;
@@ -19,6 +21,8 @@ public class SynthController {
     @FXML private ComboBox<String> WaveTableSelector2;
     @FXML private ComboBox<Integer> nVoiceSelector2;
     @FXML private RadioButton oscillatorSwitch2;
+    @FXML private Slider blendControl2;
+    @FXML private Slider spreadControl2;
     @FXML private Slider panControl2;
     @FXML private Slider volumeControl2;
     @FXML private LineChart<Integer, Byte> waveTableVisualizer2;
@@ -27,35 +31,70 @@ public class SynthController {
     @FXML private ComboBox<String> WaveTableSelector3;
     @FXML private ComboBox<Integer> nVoiceSelector3;
     @FXML private RadioButton oscillatorSwitch3;
+    @FXML private Slider blendControl3;
+    @FXML private Slider spreadControl3;
     @FXML private Slider panControl3;
     @FXML private Slider volumeControl3;
     @FXML private LineChart<Integer, Byte> waveTableVisualizer3;
 
 
+
+    @FXML private Slider masterAttack;
+    @FXML private Slider masterVolume;
     @FXML private ComboBox<String> audioInterfaceSelector;
     @FXML private ComboBox<String> midiInterfaceSelector;
 
 
     AudioHandler audioHandler;
     MidiHandler midiHandler;
+    SoundProperties soundProperties;
 
     @FXML
     void initialize() {
         audioHandler = new AudioHandler();
         midiHandler = new MidiHandler(audioHandler);
 
+        initValues();
+
+        soundProperties = new SoundProperties();
+        midiHandler.setSoundProperties(soundProperties);
+    }
+
+
+    void initValues() {
         waveTableSelectorInitialization();
         nVoicesSelectorInitialization();
         oscillatorSwitchInitialization();
         panControlInitialization();
-        volumeControlInitialiation();
+        volumeControlInitialization();
+        blendControlInitialization();
+        spreadControlInitialization();
 
+        masterAttackInitialization();
+        masterVolumeInitialization();
         audioInterfaceSelectorInitialization();
         midiInterfaceSelectorInitialization();
-
-
     }
 
+    void masterAttackInitialization() {
+        masterAttack.setValue(5);
+    }
+
+    void masterVolumeInitialization() {
+        masterVolume.setValue(70);
+    }
+
+    void blendControlInitialization() {
+        blendControl1.setValue(0);
+        blendControl2.setValue(0);
+        blendControl3.setValue(0);
+    }
+
+    void spreadControlInitialization() {
+        spreadControl1.setValue(0);
+        spreadControl2.setValue(0);
+        spreadControl3.setValue(0);
+    }
 
     void waveTableSelectorInitialization() {
         WaveTableSelector1.getItems().removeAll(WaveTableSelector1.getItems());
@@ -111,7 +150,7 @@ public class SynthController {
     }
 
 
-    void volumeControlInitialiation() {
+    void volumeControlInitialization() {
 
         volumeControl1.adjustValue(70);
 
@@ -151,6 +190,27 @@ public class SynthController {
         if (midiName != "") {
             midiHandler.setMidi(midiName);
         }
+    }
+
+    @FXML void update(MouseEvent event) {
+        soundProperties = new SoundProperties(
+                new boolean[] {oscillatorSwitch1.isSelected(), oscillatorSwitch2.isSelected(), oscillatorSwitch3.isSelected()},
+                new String[] {WaveTableSelector1.getSelectionModel().getSelectedItem(), WaveTableSelector2.getSelectionModel().getSelectedItem(), WaveTableSelector3.getSelectionModel().getSelectedItem()},
+                new int[] {nVoiceSelector1.getSelectionModel().getSelectedItem(), nVoiceSelector2.getSelectionModel().getSelectedItem(), nVoiceSelector3.getSelectionModel().getSelectedItem()},
+                new double[] {spreadControl1.getValue(), spreadControl2.getValue(), spreadControl3.getValue()},
+                new double[] {blendControl1.getValue(), blendControl2.getValue(), blendControl3.getValue()},
+                new double[] {volumeControl1.getValue(), volumeControl2.getValue(), volumeControl3.getValue()},
+                new double[] {panControl1.getValue(), panControl2.getValue(), panControl3.getValue()},
+                masterAttack.getValue(),
+                masterVolume.getValue()
+        );
+        midiHandler.setSoundProperties(soundProperties);
+    }
+
+    @FXML
+    void initPreset(MouseEvent event) {
+        initValues();
+        update(null);
     }
 
 }

@@ -10,6 +10,7 @@ public class MidiHandler {
     public MidiReceiver receiver;
     public AudioHandler audioHandler;
     public AudioTracker tracker = new AudioTracker();
+    public SoundProperties soundProperties;
 
 
     public MidiHandler(AudioHandler audioHandler) {
@@ -69,7 +70,7 @@ public class MidiHandler {
             Transmitter transmitter = midiDevice.getTransmitter();
 
             if (midiDevice.isOpen()) {
-                receiver = new MidiReceiver(audioHandler, tracker);
+                receiver = new MidiReceiver(audioHandler, tracker, soundProperties);
 
                 System.out.println("Il transmitter è: " + transmitter.toString());
                 transmitter.setReceiver(receiver);
@@ -82,6 +83,13 @@ public class MidiHandler {
         } catch (MidiUnavailableException e) {
             System.out.println("Errore unavaiacvdasg");
             e.printStackTrace();
+        }
+    }
+
+    void setSoundProperties(SoundProperties soundProperties){
+        if (receiver != null) {
+            this.soundProperties = soundProperties;
+            receiver.setSoundProperties(soundProperties);
         }
     }
 
