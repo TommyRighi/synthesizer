@@ -55,6 +55,8 @@ public class SynthController {
         midiHandler = new MidiHandler(audioHandler);
 
         initValues();
+        audioInterfaceSelectorInitialization();
+        midiInterfaceSelectorInitialization();
 
         soundProperties = new SoundProperties();
         midiHandler.setSoundProperties(soundProperties);
@@ -72,8 +74,6 @@ public class SynthController {
 
         masterAttackInitialization();
         masterVolumeInitialization();
-        audioInterfaceSelectorInitialization();
-        midiInterfaceSelectorInitialization();
     }
 
     void masterAttackInitialization() {
@@ -81,7 +81,7 @@ public class SynthController {
     }
 
     void masterVolumeInitialization() {
-        masterVolume.setValue(70);
+        masterVolume.setValue(0);
     }
 
     void blendControlInitialization() {
@@ -152,11 +152,11 @@ public class SynthController {
 
     void volumeControlInitialization() {
 
-        volumeControl1.adjustValue(70);
+        volumeControl1.adjustValue(-5);
 
-        volumeControl2.adjustValue(70);
+        volumeControl2.adjustValue(-5);
 
-        volumeControl3.adjustValue(70);
+        volumeControl3.adjustValue(-5);
 
     }
 

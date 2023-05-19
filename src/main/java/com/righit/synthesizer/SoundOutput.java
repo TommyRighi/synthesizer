@@ -15,6 +15,8 @@ public class SoundOutput extends Thread{
     public double volume;
     public String wave;
     public double pitch;
+    public FloatControl gain;
+    public FloatControl panning;
 
     SoundOutput(AudioHandler audioHandler, byte note) {
 
@@ -27,13 +29,6 @@ public class SoundOutput extends Thread{
             DataLine.Info LineInfo = new DataLine.Info(SourceDataLine.class, audioHandler.getAudioFormat());
             sourceLine = (SourceDataLine)audioHandler.getMixer().getLine(LineInfo);
             sourceLine.open();
-
-            FloatControl gain = (FloatControl) sourceLine.getControl(FloatControl.Type.MASTER_GAIN);
-            gain.setValue((float) volume / 100 * gain.getMaximum());
-
-            FloatControl panning = (FloatControl) sourceLine.getControl(FloatControl.Type.PAN);
-            panning.setValue((float) pan / 50);
-
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -44,18 +39,20 @@ public class SoundOutput extends Thread{
     @Override
     public void run() {
 
+        controls();
+
         sourceLine.start();
 
         byte[] signal = new byte[AudioHandler.BUFFER_SIZE];
         double wavePos = 0;
 
         switch (wave) {
-            case "Sine":
+            case "Sine" -> {
                 while (isPlaying) {
 
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch) ) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
+                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
 
                     }
 
@@ -63,17 +60,16 @@ public class SoundOutput extends Thread{
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
 
                 }
-                break;
-            case "Square":
+            }
+            case "Square" -> {
                 while (isPlaying) {
 
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch) ) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
+                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
                         if (signal[i] < 0) {
                             signal[i] = Byte.MAX_VALUE;
-                        }
-                        else {
+                        } else {
                             signal[i] = -Byte.MAX_VALUE;
                         }
                     }
@@ -82,8 +78,8 @@ public class SoundOutput extends Thread{
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
 
                 }
-                break;
-            case "Noise":
+            }
+            case "Noise" -> {
                 Random random = new Random();
                 while (isPlaying) {
 
@@ -94,14 +90,19 @@ public class SoundOutput extends Thread{
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
 
                 }
-                break;
-            case "Saw":
-
-            default:
-                System.out.println("Errore nella selezione wavetable");
+            }
+            default -> System.out.println("Errore nella selezione wavetable");
         }
 
+        for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
+            try {
+                gain.setValue(gain.getValue() - (gain.getMaximum() - gain.getMinimum() / 2 * AudioHandler.BUFFER_SIZE));
+            }
+            catch (Exception e) {
+                System.out.println("LMAO");
+            }
 
+        }
 
         sourceLine.flush();
         sourceLine.close();
@@ -110,28 +111,27 @@ public class SoundOutput extends Thread{
     }
 
 
-    public void stopNote() {
-        isPlaying = false;
+    void controls(){
+
+        gain = (FloatControl) sourceLine.getControl(FloatControl.Type.MASTER_GAIN);
+        gain.setValue((float) volume);
+
+        panning = (FloatControl) sourceLine.getControl(FloatControl.Type.PAN);
+        panning.setValue((float) pan / 50);
+
     }
 
-    public double getPan() {
-        return pan;
+
+    public void stopNote() {
+        isPlaying = false;
     }
 
     public void setPan(double pan) {
         this.pan = pan;
     }
 
-    public double getVolume() {
-        return volume;
-    }
-
     public void setVolume(double volume) {
         this.volume = volume;
-    }
-
-    public String getWave() {
-        return wave;
     }
 
     public void setWave(String wave) {

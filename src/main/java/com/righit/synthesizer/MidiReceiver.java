@@ -37,14 +37,14 @@ public class MidiReceiver implements Receiver {
 
                     if (soundProperties.getActiveOscillators()[i]) {
 
-                        for (int j = 0; j < soundProperties.getnVoices()[j]; j++) {
+                        for (int j = 0; j < soundProperties.getnVoices()[i]; j++) {
 
                             SoundOutput nota = new SoundOutput(audioHandler, message.getMessage()[1]);
 
                             nota.setPan(soundProperties.getPans()[i] + (j * Math.pow(-1, j) * soundProperties.getSpread()[i]));
-                            nota.setVolume(((soundProperties.masterVolume - soundProperties.getVolumes()[i] - (j * Math.pow(-1, j) * soundProperties.getBlend()[i])) / soundProperties.getnVoices()[i]) / soundProperties.N_OSCILLATORS);
+                            nota.setVolume((soundProperties.masterVolume + soundProperties.getVolumes()[i]) / 2 - (j * Math.pow(-1, j) * soundProperties.getBlend()[i]));
                             nota.setWave(soundProperties.waveTable[i]);
-                            nota.setPitch(((double) (message.getMessage()[1] - 69) /12) + (j * Math.pow(-1, j)));
+                            nota.setPitch(((double) (message.getMessage()[1] - 69) /12) + (j * Math.pow(-1, j) / 25 * soundProperties.getSpread()[i]));
 
                             nota.start();
 

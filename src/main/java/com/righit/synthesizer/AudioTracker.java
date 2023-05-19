@@ -1,21 +1,22 @@
 package com.righit.synthesizer;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class AudioTracker {
 
-    HashMap<Integer, SoundOutput> threadList;
+    ConcurrentHashMap<Integer, SoundOutput> threadList;
 
     AudioTracker() {
-        threadList = new HashMap<>();
+        threadList = new ConcurrentHashMap<>();
     }
 
     void addThread(int hash, SoundOutput thread) {
         threadList.put(hash, thread);
     }
 
-    HashMap<Integer, SoundOutput> getThreadMap() {
+    ConcurrentHashMap<Integer, SoundOutput> getThreadMap() {
         return threadList;
     }
 

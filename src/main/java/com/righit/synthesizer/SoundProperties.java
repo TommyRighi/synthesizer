@@ -53,71 +53,24 @@ public class SoundProperties {
         return activeOscillators;
     }
 
-    public void setActiveOscillators(boolean[] activeOscillators) {
-        this.activeOscillators = activeOscillators;
-    }
-
-    public String[] getWaveTable() {
-        return waveTable;
-    }
-
-    public void setWaveTable(String[] waveTable) {
-        this.waveTable = waveTable;
-    }
-
     public int[] getnVoices() {
         return nVoices;
-    }
-
-    public void setnVoices(int[] nVoices) {
-        this.nVoices = nVoices;
     }
 
     public double[] getSpread() {
         return spread;
     }
 
-    public void setSpread(double[] spread) {
-        this.spread = spread;
-    }
-
     public double[] getBlend() {
         return blend;
-    }
-
-    public void setBlend(double[] blend) {
-        this.blend = blend;
     }
 
     public double[] getVolumes() {
         return volumes;
     }
 
-    public void setVolumes(double[] volumes) {
-        this.volumes = volumes;
-    }
-
     public double[] getPans() {
         return pans;
     }
 
-    public void setPans(double[] pans) {
-        this.pans = pans;
-    }
-
-    public double getAttack() {
-        return attack;
-    }
-
-    public void setAttack(double attack) {
-        this.attack = attack;
-    }
-
-    public double getMasterVolume() {
-        return masterVolume;
-    }
-
-    public void setMasterVolume(double masterVolume) {
-        this.masterVolume = masterVolume;
-    }
 }
