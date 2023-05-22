@@ -45,38 +45,54 @@ public class SoundOutput extends Thread{
 
         byte[] signal = new byte[AudioHandler.BUFFER_SIZE];
         double wavePos = 0;
+        double tDivP;
 
         switch (wave) {
             case "Sine" -> {
                 while (isPlaying) {
 
-
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
                         signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
-
                     }
 
-
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
-
                 }
             }
             case "Square" -> {
                 while (isPlaying) {
 
-
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
-                        if (signal[i] < 0) {
-                            signal[i] = Byte.MAX_VALUE;
-                        } else {
-                            signal[i] = -Byte.MAX_VALUE;
-                        }
+                        signal[i] = (byte) (Byte.MAX_VALUE * Math.signum(Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2))));
+
                     }
 
+                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
+                }
+            }
+            case "Saw" -> {
+                tDivP = (wavePos % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+                while (isPlaying) {
+
+                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
+
+                        signal[i]=  (byte) (Byte.MAX_VALUE * (2 * (tDivP - Math.floor(0.5 + tDivP))));
+                        tDivP = (wavePos++ % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+
+                    }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
+                }
+            }
+            case "Triangle" -> {
+                tDivP = (wavePos % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+                while (isPlaying) {
 
+                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
+                        signal[i]=  (byte) (Byte.MAX_VALUE *(2 * (2 * Math.abs(tDivP - Math.floor(0.5 + tDivP))) - 1));
+                        tDivP = (wavePos++ % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+                    }
+
+                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
             case "Noise" -> {
@@ -87,8 +103,8 @@ public class SoundOutput extends Thread{
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
                         signal[i] = (byte) random.nextInt();
                     }
-                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
 
+                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
             default -> System.out.println("Errore nella selezione wavetable");

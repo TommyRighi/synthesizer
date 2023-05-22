@@ -17,137 +17,142 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.righit.synthesizer.SynthController">
    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Effects">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Save preset">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-            <Menu mnemonicParsing="false" text="Load preset">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="About" />
-               </items>
-            </Menu>
-        </menus>
-      </MenuBar>
+       <MenuBar BorderPane.alignment="CENTER">
+           <Menu mnemonicParsing="false" text="File">
+               <MenuItem mnemonicParsing="false" text="Close"/>
+           </Menu>
+           <Menu mnemonicParsing="false" text="Effects">
+               <MenuItem mnemonicParsing="false" text="Delete"/>
+           </Menu>
+           <Menu mnemonicParsing="false" text="Save preset">
+               <MenuItem mnemonicParsing="false" text="About"/>
+           </Menu>
+           <Menu mnemonicParsing="false" text="Load preset">
+               <MenuItem mnemonicParsing="false" text="About"/>
+           </Menu>
+       </MenuBar>
    </top>
    <left>
-      <AnchorPane maxWidth="-Infinity" prefHeight="425.0" prefWidth="300.0">
-         <children>
-            <ComboBox fx:id="WaveTableSelector1" layoutX="76.0" layoutY="53.0" prefWidth="150.0" />
-            <RadioButton fx:id="oscillatorSwitch1" layoutX="110.0" layoutY="22.0" mnemonicParsing="false" text="Oscillator 1" />
-            <Slider fx:id="volumeControl1" layoutX="-19.0" layoutY="241.0" max="5.0" min="-60.0" prefWidth="143.0" rotate="-90.0" />
-            <Label layoutX="32.0" layoutY="329.0" text="Volume" />
-            <ComboBox fx:id="nVoiceSelector1" layoutX="44.0" layoutY="120.0" prefHeight="25.0" prefWidth="65.0" />
-            <Slider fx:id="panControl1" layoutX="81.0" layoutY="385.0" max="45.0" min="-45.0" />
-            <Label layoutX="43.0" layoutY="384.0" text="Pan" />
-            <Slider fx:id="spreadControl1" layoutX="151.0" layoutY="126.0" max="0.4" prefHeight="14.0" prefWidth="53.0" />
-            <Slider fx:id="blendControl1" layoutX="207.0" layoutY="113.0" max="1.0" min="-1.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
-            <LineChart fx:id="waveTableVisualizer1" alternativeRowFillVisible="false" axisSortingPolicy="NONE" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="77.0" layoutY="183.0" legendSide="TOP" legendVisible="false" prefHeight="160.0" prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis autoRanging="false" minorTickVisible="false" tickLabelsVisible="false" tickMarkVisible="false">
-                     <effect>
-                        <Blend />
-                     </effect>
-                  </NumberAxis>
-              </yAxis>
-            </LineChart>
-            <Label layoutX="53.0" layoutY="94.0" text="N.Voices" />
-            <Label layoutX="158.0" layoutY="94.0" text="Spread" />
-            <Label layoutX="247.0" layoutY="112.0" text="Blend" />
-         </children>
-      </AnchorPane>
+       <AnchorPane maxWidth="-Infinity" prefHeight="425.0" prefWidth="300.0">
+           <ComboBox fx:id="WaveTableSelector1" layoutX="76.0" layoutY="53.0" prefWidth="150.0"/>
+           <RadioButton fx:id="oscillatorSwitch1" layoutX="110.0" layoutY="22.0" mnemonicParsing="false"
+                        text="Oscillator 1"/>
+           <Slider fx:id="volumeControl1" layoutX="-19.0" layoutY="241.0" max="5.0" min="-60.0" prefWidth="143.0"
+                   rotate="-90.0"/>
+           <Label layoutX="32.0" layoutY="329.0" text="Volume"/>
+           <ComboBox fx:id="nVoiceSelector1" layoutX="44.0" layoutY="120.0" prefHeight="25.0" prefWidth="65.0"/>
+           <Slider fx:id="panControl1" layoutX="81.0" layoutY="385.0" max="45.0" min="-45.0"/>
+           <Label layoutX="43.0" layoutY="384.0" text="Pan"/>
+           <Slider fx:id="spreadControl1" layoutX="151.0" layoutY="126.0" max="0.4" prefHeight="14.0" prefWidth="53.0"/>
+           <Slider fx:id="blendControl1" layoutX="207.0" layoutY="113.0" max="1.0" min="-1.0" prefHeight="14.0"
+                   prefWidth="53.0" rotate="-90.0"/>
+           <LineChart fx:id="waveTableVisualizer1" alternativeRowFillVisible="false" axisSortingPolicy="NONE"
+                      createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false"
+                      layoutX="77.0" layoutY="183.0" legendSide="TOP" legendVisible="false" prefHeight="160.0"
+                      prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+               <xAxis>
+                   <CategoryAxis side="BOTTOM"/>
+               </xAxis>
+               <yAxis>
+                   <NumberAxis autoRanging="false" minorTickVisible="false" tickLabelsVisible="false"
+                               tickMarkVisible="false">
+                       <effect>
+                           <Blend/>
+                       </effect>
+                   </NumberAxis>
+               </yAxis>
+           </LineChart>
+           <Label layoutX="53.0" layoutY="94.0" text="N.Voices"/>
+           <Label layoutX="158.0" layoutY="94.0" text="Spread"/>
+           <Label layoutX="247.0" layoutY="112.0" text="Blend"/>
+       </AnchorPane>
    </left>
    <center>
-      <AnchorPane prefHeight="425.0" prefWidth="257.0" BorderPane.alignment="CENTER">
-         <children>
-            <RadioButton fx:id="oscillatorSwitch2" layoutX="110.0" layoutY="26.0" mnemonicParsing="false" text="Oscillator 2" />
-            <ComboBox fx:id="WaveTableSelector2" layoutX="76.0" layoutY="56.0" prefWidth="150.0" />
-            <Slider fx:id="volumeControl2" layoutX="-28.0" layoutY="239.0" max="5.0" min="-60.0" rotate="-90.0" />
-            <Label layoutX="22.0" layoutY="329.0" text="Volume" />
-            <ComboBox fx:id="nVoiceSelector2" layoutX="45.0" layoutY="122.0" prefHeight="25.0" prefWidth="65.0" />
-            <Slider fx:id="panControl2" layoutX="81.0" layoutY="387.0" max="45.0" min="-45.0" />
-            <Label layoutX="33.0" layoutY="385.0" prefWidth="20.0" text="Pan" />
-            <Slider fx:id="spreadControl2" layoutX="151.0" layoutY="128.0" max="0.4" prefHeight="14.0" prefWidth="53.0" />
-            <Slider fx:id="blendControl2" layoutX="207.0" layoutY="115.0" max="1.0" min="-1.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
-            <LineChart fx:id="waveTableVisualizer2" alternativeRowFillVisible="false" axisSortingPolicy="NONE" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="77.0" layoutY="183.0" legendSide="TOP" legendVisible="false" prefHeight="160.0" prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
-               <xAxis>
-                  <CategoryAxis side="BOTTOM" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis autoRanging="false" minorTickVisible="false" tickLabelsVisible="false" tickMarkVisible="false">
-                     <effect>
-                        <Blend />
-                     </effect>
+       <AnchorPane prefHeight="425.0" prefWidth="257.0" BorderPane.alignment="CENTER">
+           <RadioButton fx:id="oscillatorSwitch2" layoutX="110.0" layoutY="26.0" mnemonicParsing="false"
+                        text="Oscillator 2"/>
+           <ComboBox fx:id="WaveTableSelector2" layoutX="76.0" layoutY="56.0" prefWidth="150.0"/>
+           <Slider fx:id="volumeControl2" layoutX="-28.0" layoutY="239.0" max="5.0" min="-60.0" rotate="-90.0"/>
+           <Label layoutX="22.0" layoutY="329.0" text="Volume"/>
+           <ComboBox fx:id="nVoiceSelector2" layoutX="45.0" layoutY="122.0" prefHeight="25.0" prefWidth="65.0"/>
+           <Slider fx:id="panControl2" layoutX="81.0" layoutY="387.0" max="45.0" min="-45.0"/>
+           <Label layoutX="33.0" layoutY="385.0" prefWidth="20.0" text="Pan"/>
+           <Slider fx:id="spreadControl2" layoutX="151.0" layoutY="128.0" max="0.4" prefHeight="14.0" prefWidth="53.0"/>
+           <Slider fx:id="blendControl2" layoutX="207.0" layoutY="115.0" max="1.0" min="-1.0" prefHeight="14.0"
+                   prefWidth="53.0" rotate="-90.0"/>
+           <LineChart fx:id="waveTableVisualizer2" alternativeRowFillVisible="false" axisSortingPolicy="NONE"
+                      createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false"
+                      layoutX="77.0" layoutY="183.0" legendSide="TOP" legendVisible="false" prefHeight="160.0"
+                      prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+              <xAxis>
+                  <CategoryAxis side="BOTTOM"/>
+              </xAxis>
+              <yAxis>
+                  <NumberAxis autoRanging="false" minorTickVisible="false" tickLabelsVisible="false"
+                              tickMarkVisible="false">
+                      <effect>
+                          <Blend/>
+                      </effect>
                   </NumberAxis>
-               </yAxis>
-            </LineChart>
-            <Label layoutX="53.0" layoutY="95.0" text="N.Voices" />
-            <Label layoutX="158.0" layoutY="95.0" text="Spread" />
-            <Label layoutX="249.0" layoutY="112.0" text="Blend" />
-         </children>
-      </AnchorPane>
+              </yAxis>
+           </LineChart>
+           <Label layoutX="53.0" layoutY="95.0" text="N.Voices"/>
+           <Label layoutX="158.0" layoutY="95.0" text="Spread"/>
+           <Label layoutX="249.0" layoutY="112.0" text="Blend"/>
+       </AnchorPane>
    </center>
    <right>
-      <AnchorPane prefHeight="475.0" prefWidth="300.0" BorderPane.alignment="CENTER">
-         <children>
-            <RadioButton fx:id="oscillatorSwitch3" layoutX="107.0" layoutY="29.0" mnemonicParsing="false" text="Oscillator 3" />
-            <ComboBox fx:id="WaveTableSelector3" layoutX="75.0" layoutY="60.0" prefWidth="150.0" />
-            <Slider fx:id="volumeControl3" layoutX="-27.0" layoutY="234.0" max="6.0" min="-60.0" rotate="-90.0" />
-            <Label layoutX="23.0" layoutY="331.0" text="Volume" />
-            <ComboBox fx:id="nVoiceSelector3" layoutX="46.0" layoutY="124.0" prefHeight="25.0" prefWidth="65.0" />
-            <Slider fx:id="panControl3" layoutX="78.0" layoutY="382.0" max="45.0" min="-45.0" />
-            <Label layoutX="34.0" layoutY="381.0" text="Pan" />
-            <Slider fx:id="spreadControl3" layoutX="150.0" layoutY="130.0" max="0.4" prefHeight="14.0" prefWidth="53.0" />
-            <Slider fx:id="blendControl3" layoutX="206.0" layoutY="123.0" max="1.0" min="-1.0" prefHeight="14.0" prefWidth="53.0" rotate="-90.0" />
-            <LineChart fx:id="waveTableVisualizer3" alternativeRowFillVisible="false" axisSortingPolicy="NONE" createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" layoutX="76.0" layoutY="175.0" legendSide="TOP" legendVisible="false" prefHeight="160.0" prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
-               <xAxis>
-                  <CategoryAxis side="BOTTOM" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis autoRanging="false" minorTickVisible="false" tickLabelsVisible="false" tickMarkVisible="false">
-                     <effect>
-                        <Blend />
-                     </effect>
+       <AnchorPane prefHeight="475.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+           <RadioButton fx:id="oscillatorSwitch3" layoutX="107.0" layoutY="29.0" mnemonicParsing="false"
+                        text="Oscillator 3"/>
+           <ComboBox fx:id="WaveTableSelector3" layoutX="75.0" layoutY="60.0" prefWidth="150.0"/>
+           <Slider fx:id="volumeControl3" layoutX="-27.0" layoutY="234.0" max="6.0" min="-60.0" rotate="-90.0"/>
+           <Label layoutX="23.0" layoutY="331.0" text="Volume"/>
+           <ComboBox fx:id="nVoiceSelector3" layoutX="46.0" layoutY="124.0" prefHeight="25.0" prefWidth="65.0"/>
+           <Slider fx:id="panControl3" layoutX="78.0" layoutY="382.0" max="45.0" min="-45.0"/>
+           <Label layoutX="34.0" layoutY="381.0" text="Pan"/>
+           <Slider fx:id="spreadControl3" layoutX="150.0" layoutY="130.0" max="0.4" prefHeight="14.0" prefWidth="53.0"/>
+           <Slider fx:id="blendControl3" layoutX="206.0" layoutY="123.0" max="1.0" min="-1.0" prefHeight="14.0"
+                   prefWidth="53.0" rotate="-90.0"/>
+           <LineChart fx:id="waveTableVisualizer3" alternativeRowFillVisible="false" axisSortingPolicy="NONE"
+                      createSymbols="false" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false"
+                      layoutX="76.0" layoutY="175.0" legendSide="TOP" legendVisible="false" prefHeight="160.0"
+                      prefWidth="200.0" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+              <xAxis>
+                  <CategoryAxis side="BOTTOM"/>
+              </xAxis>
+              <yAxis>
+                  <NumberAxis autoRanging="false" minorTickVisible="false" tickLabelsVisible="false"
+                              tickMarkVisible="false">
+                      <effect>
+                          <Blend/>
+                      </effect>
                   </NumberAxis>
-               </yAxis>
-            </LineChart>
-            <Label layoutX="55.0" layoutY="98.0" text="N.Voices" />
-            <Label layoutX="157.0" layoutY="98.0" text="Spread" />
-            <Label layoutX="249.0" layoutY="120.0" text="Blend" />
-         </children>
-      </AnchorPane>
+              </yAxis>
+           </LineChart>
+           <Label layoutX="55.0" layoutY="98.0" text="N.Voices"/>
+           <Label layoutX="157.0" layoutY="98.0" text="Spread"/>
+           <Label layoutX="249.0" layoutY="120.0" text="Blend"/>
+       </AnchorPane>
    </right>
    <bottom>
-      <AnchorPane prefHeight="200.0" prefWidth="900.0" BorderPane.alignment="CENTER">
-         <children>
-            <Slider fx:id="masterVolume" layoutX="738.0" layoutY="165.0" max="5.0" min="-60.0" />
-            <Label layoutX="788.0" layoutY="142.0" text="Master" />
-            <Slider fx:id="masterAttack" layoutX="737.0" layoutY="111.0" />
-            <Label layoutX="787.0" layoutY="88.0" text="Attack" />
-            <ComboBox fx:id="audioInterfaceSelector" layoutX="678.0" layoutY="14.0" prefWidth="150.0" />
-            <ComboBox fx:id="midiInterfaceSelector" layoutX="678.0" layoutY="46.0" prefWidth="150.0" />
-            <Button layoutX="845.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#changeMixer" text="Ok" />
-            <Button layoutX="845.0" layoutY="46.0" mnemonicParsing="false" onMouseClicked="#changeMidi" text="Ok" />
-            <Label layoutX="589.0" layoutY="18.0" text="Audio Output" />
-            <Label layoutX="592.0" layoutY="50.0" prefHeight="17.0" prefWidth="67.0" text="Midi Input" />
-            <Button layoutX="589.0" layoutY="99.0" mnemonicParsing="false" onMouseClicked="#update" prefHeight="37.0" prefWidth="127.0" text="Activate Preset" />
-            <Button layoutX="589.0" layoutY="141.0" mnemonicParsing="false" onMouseClicked="#initPreset" prefHeight="37.0" prefWidth="127.0" text="Init Preset" />
-         </children>
-      </AnchorPane>
+       <AnchorPane prefHeight="200.0" prefWidth="900.0" BorderPane.alignment="CENTER">
+           <Slider fx:id="masterVolume" layoutX="738.0" layoutY="165.0" max="5.0" min="-60.0"/>
+           <Label layoutX="788.0" layoutY="142.0" text="Master"/>
+           <Slider fx:id="masterAttack" layoutX="737.0" layoutY="111.0"/>
+           <Label layoutX="787.0" layoutY="88.0" text="Attack"/>
+           <ComboBox fx:id="audioInterfaceSelector" layoutX="678.0" layoutY="14.0" prefWidth="150.0"/>
+           <ComboBox fx:id="midiInterfaceSelector" layoutX="678.0" layoutY="46.0" prefWidth="150.0"/>
+           <Button layoutX="845.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#changeMixer" text="Ok"/>
+           <Button fx:id="midiokButton" layoutX="845.0" layoutY="46.0" mnemonicParsing="false"
+                   onMouseClicked="#changeMidi" text="Ok"/>
+           <Label layoutX="589.0" layoutY="18.0" text="Audio Output"/>
+           <Label fx:id="midiTextLabel" layoutX="592.0" layoutY="50.0" prefHeight="17.0" prefWidth="67.0"
+                  text="Midi Input"/>
+           <Button fx:id="activatePresetButton" layoutX="589.0" layoutY="99.0" mnemonicParsing="false"
+                   onMouseClicked="#update" prefHeight="37.0" prefWidth="127.0" text="Activate Preset"/>
+           <Button fx:id="initPresetButton" layoutX="589.0" layoutY="141.0" mnemonicParsing="false"
+                   onMouseClicked="#initPreset" prefHeight="37.0" prefWidth="127.0" text="Init Preset"/>
+       </AnchorPane>
    </bottom>
 </BorderPane>

@@ -1,12 +1,13 @@
 package com.righit.synthesizer;
 
 import javax.sound.midi.*;
+import java.util.ArrayList;
 
 public class MidiHandler {
 
     public MidiDevice midiDevice;
     public MidiDevice.Info[] midiInfo;
-    public String[] midisNames;
+    public ArrayList<String> midisNames;
     public MidiReceiver receiver;
     public AudioHandler audioHandler;
     public AudioTracker tracker = new AudioTracker();
@@ -18,9 +19,9 @@ public class MidiHandler {
         this.audioHandler = audioHandler;
 
         midiInfo = MidiSystem.getMidiDeviceInfo();
-        midisNames = new String[midiInfo.length];
-        for (int i = 0; i < midiInfo.length; i++) {
-            midisNames[i] = midiInfo[i].getName();
+        midisNames = new ArrayList<>();
+        for (MidiDevice.Info info : midiInfo) {
+            midisNames.add(info.getName());
         }
 
 
@@ -43,7 +44,7 @@ public class MidiHandler {
 
 
 
-    public String[] getMidisNames(){
+    public ArrayList<String> getMidisNames(){
         return midisNames;
     }
 

@@ -5,13 +5,13 @@ import java.util.Arrays;
 public class SoundProperties {
 
     public final int N_OSCILLATORS = 3;
-    public boolean[] activeOscillators = new boolean[3];
-    public String[] waveTable = new String[3];
-    public int[] nVoices = new int[3];
-    public double[] spread = new double[3];
-    public double[] blend = new double[3];
-    public double[] volumes = new double[3];
-    public double[] pans = new double[3];
+    public boolean[] activeOscillators = new boolean[N_OSCILLATORS];
+    public String[] waveTable = new String[N_OSCILLATORS];
+    public int[] nVoices = new int[N_OSCILLATORS];
+    public double[] spread = new double[N_OSCILLATORS];
+    public double[] blend = new double[N_OSCILLATORS];
+    public double[] volumes = new double[N_OSCILLATORS];
+    public double[] pans = new double[N_OSCILLATORS];
     public double attack;
     public double masterVolume;
 
@@ -30,8 +30,14 @@ public class SoundProperties {
         this.attack = attack;
         this.masterVolume = masterVolume;
 
+        for (int i = 0; i < N_OSCILLATORS; i++) {
+            if (volumes[i] == -60) {
+                activeOscillators[i] = false;
+            }
+        }
 
-        System.out.println(this.toString());
+
+        System.out.println(this);
     }
 
     @Override

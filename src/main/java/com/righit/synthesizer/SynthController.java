@@ -2,10 +2,10 @@ package com.righit.synthesizer;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+
+import java.util.ArrayList;
 
 public class SynthController {
 
@@ -43,6 +43,10 @@ public class SynthController {
     @FXML private Slider masterVolume;
     @FXML private ComboBox<String> audioInterfaceSelector;
     @FXML private ComboBox<String> midiInterfaceSelector;
+    @FXML private Label midiTextLabel;
+    @FXML private Button midiokButton;
+    @FXML private Button activatePresetButton;
+    @FXML private Button initPresetButton;
 
 
     AudioHandler audioHandler;
@@ -64,6 +68,16 @@ public class SynthController {
 
 
     void initValues() {
+        hideInTheBush();
+
+        initPresetValues();
+
+        masterAttackInitialization();
+        masterVolumeInitialization();
+    }
+
+    void initPresetValues() {
+
         waveTableSelectorInitialization();
         nVoicesSelectorInitialization();
         oscillatorSwitchInitialization();
@@ -72,8 +86,6 @@ public class SynthController {
         blendControlInitialization();
         spreadControlInitialization();
 
-        masterAttackInitialization();
-        masterVolumeInitialization();
     }
 
     void masterAttackInitialization() {
@@ -98,15 +110,15 @@ public class SynthController {
 
     void waveTableSelectorInitialization() {
         WaveTableSelector1.getItems().removeAll(WaveTableSelector1.getItems());
-        WaveTableSelector1.getItems().addAll("Sine", "Square", "Saw", "Noise");
+        WaveTableSelector1.getItems().addAll("Sine", "Square", "Saw", "Triangle", "Noise");
         WaveTableSelector1.getSelectionModel().select("Sine");
 
         WaveTableSelector2.getItems().removeAll(WaveTableSelector2.getItems());
-        WaveTableSelector2.getItems().addAll("Sine", "Square", "Saw", "Noise");
+        WaveTableSelector2.getItems().addAll("Sine", "Square", "Saw", "Triangle", "Noise");
         WaveTableSelector2.getSelectionModel().select("Square");
 
         WaveTableSelector3.getItems().removeAll(WaveTableSelector3.getItems());
-        WaveTableSelector3.getItems().addAll("Sine", "Square", "Saw", "Noise");
+        WaveTableSelector3.getItems().addAll("Sine", "Square", "Saw", "Triangle", "Noise");
         WaveTableSelector3. getSelectionModel().select("Saw");
     }
 
@@ -161,7 +173,7 @@ public class SynthController {
     }
 
     void audioInterfaceSelectorInitialization() {
-        String[] arrayMixers = audioHandler.getMixersNames();
+        ArrayList<String> arrayMixers = audioHandler.getMixersNames();
 
 
         audioInterfaceSelector.getItems().removeAll(audioInterfaceSelector.getItems());
@@ -169,7 +181,7 @@ public class SynthController {
     }
 
     void midiInterfaceSelectorInitialization() {
-        String[] arrayMidis = midiHandler.getMidisNames();
+        ArrayList<String> arrayMidis = midiHandler.getMidisNames();
 
         midiInterfaceSelector.getItems().removeAll(midiInterfaceSelector.getItems());
         midiInterfaceSelector.getItems().addAll(arrayMidis);
@@ -180,6 +192,10 @@ public class SynthController {
 
         if (mixerName != "") {
             audioHandler.setMixer(mixerName);
+
+            if (!midiInterfaceSelector.isVisible()) {
+                midiVisible();
+            }
         }
     }
 
@@ -189,6 +205,10 @@ public class SynthController {
 
         if (midiName != "") {
             midiHandler.setMidi(midiName);
+
+            if (!initPresetButton.isVisible()) {
+                presetVisible();
+            }
         }
     }
 
@@ -209,8 +229,28 @@ public class SynthController {
 
     @FXML
     void initPreset(MouseEvent event) {
-        initValues();
+        initPresetValues();
         update(null);
+    }
+
+    void midiVisible() {
+        midiInterfaceSelector.setVisible(true);
+        midiTextLabel.setVisible(true);
+        midiokButton.setVisible(true);
+    }
+
+    void presetVisible() {
+        activatePresetButton.setVisible(true);
+        initPresetButton.setVisible(true);
+    }
+
+    void hideInTheBush() {
+        midiInterfaceSelector.setVisible(false);
+        midiTextLabel.setVisible(false);
+        midiokButton.setVisible(false);
+
+        activatePresetButton.setVisible(false);
+        initPresetButton.setVisible(false);
     }
 
 }

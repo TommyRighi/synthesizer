@@ -2,7 +2,7 @@ package com.righit.synthesizer;
 
 
 import javax.sound.sampled.*;
-
+import java.util.ArrayList;
 
 
 public class AudioHandler {
@@ -10,7 +10,7 @@ public class AudioHandler {
     static final int BUFFER_SIZE = 512;
     static final int SAMPLE_RATE = 48000;
 
-    public String[] mixersNames;
+    public ArrayList<String> mixersNames;
     public Mixer.Info[] mixerInfo;
     public Mixer mixer;
     AudioFormat audioFormat;
@@ -22,10 +22,13 @@ public class AudioHandler {
         audioFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, SAMPLE_RATE, 16, 2, 4, SAMPLE_RATE, false);
 
 
-        mixersNames = new String[mixerInfo.length];
-        for (int i = 0; i < mixerInfo.length; i++) {
-            mixersNames[i] = mixerInfo[i].getName();
+        mixersNames = new ArrayList<>();
+        for (Mixer.Info info : mixerInfo) {
+            if (!info.getName().startsWith("Port")) {
+                mixersNames.add(info.getName());
+            }
         }
+
 
     }
 
@@ -41,7 +44,7 @@ public class AudioHandler {
     }
 
 
-    public String[] getMixersNames(){
+    public ArrayList<String> getMixersNames(){
         return mixersNames;
     }
 
