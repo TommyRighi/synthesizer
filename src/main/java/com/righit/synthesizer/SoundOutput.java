@@ -70,13 +70,12 @@ public class SoundOutput extends Thread{
                 }
             }
             case "Saw" -> {
-                tDivP = (wavePos % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+                pitch = 100 * pitch;
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
 
-                        signal[i]=  (byte) (Byte.MAX_VALUE * (2 * (tDivP - Math.floor(0.5 + tDivP))));
-                        tDivP = (wavePos++ % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+                        signal[i]=  (byte) (Byte.MAX_VALUE * (2 * ((wavePos++ / ((double) AudioHandler.SAMPLE_RATE / pitch)) - Math.floor(1/2d + (i / ((double) AudioHandler.SAMPLE_RATE / pitch))))));
 
                     }
 

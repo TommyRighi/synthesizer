@@ -2,6 +2,8 @@ package com.righit.synthesizer;
 
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
@@ -16,7 +18,10 @@ public class SynthController {
     @FXML private Slider spreadControl1;
     @FXML private Slider panControl1;
     @FXML private Slider volumeControl1;
-    @FXML private LineChart<Integer, Byte> waveTableVisualizer1;
+    @FXML private LineChart<Number, Number> waveTableVisualizer1;
+    @FXML private NumberAxis xAxis1;
+    @FXML private NumberAxis yAxis1;
+
 
     @FXML private ComboBox<String> WaveTableSelector2;
     @FXML private ComboBox<Integer> nVoiceSelector2;
@@ -25,7 +30,9 @@ public class SynthController {
     @FXML private Slider spreadControl2;
     @FXML private Slider panControl2;
     @FXML private Slider volumeControl2;
-    @FXML private LineChart<Integer, Byte> waveTableVisualizer2;
+    @FXML private LineChart<Number, Number> waveTableVisualizer2;
+    @FXML private NumberAxis xAxis2;
+    @FXML private NumberAxis yAxis2;
 
 
     @FXML private ComboBox<String> WaveTableSelector3;
@@ -35,7 +42,9 @@ public class SynthController {
     @FXML private Slider spreadControl3;
     @FXML private Slider panControl3;
     @FXML private Slider volumeControl3;
-    @FXML private LineChart<Integer, Byte> waveTableVisualizer3;
+    @FXML private LineChart<Number, Number> waveTableVisualizer3;
+    @FXML private NumberAxis xAxis3;
+    @FXML private NumberAxis yAxis3;
 
 
 
@@ -225,6 +234,7 @@ public class SynthController {
                 masterVolume.getValue()
         );
         midiHandler.setSoundProperties(soundProperties);
+        showSignalWaves();
     }
 
     @FXML
@@ -251,6 +261,67 @@ public class SynthController {
 
         activatePresetButton.setVisible(false);
         initPresetButton.setVisible(false);
+    }
+
+    void showSignalWaves() {
+
+        XYChart.Series<Number, Number> series[] = new XYChart.Series[3];
+        series[0] = new XYChart.Series<>();
+        series[1] = new XYChart.Series<>();
+        series[2] = new XYChart.Series<>();
+
+
+        if (oscillatorSwitch1.isSelected()) {
+            waveTableVisualizer1.getData().removeAll(waveTableVisualizer1.getData());
+            waveTableVisualizer1.getData().add(series[0]);
+            for (int i = 0; i < 100; i++) {
+                series[0].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector1.getValue())));
+            }
+        }
+        if (oscillatorSwitch2.isSelected()) {
+            waveTableVisualizer2.getData().removeAll(waveTableVisualizer2.getData());
+            waveTableVisualizer2.getData().add(series[1]);
+            for (int i = 0; i < 100; i++) {
+                series[1].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector2.getValue())));
+            }
+        }
+        if (oscillatorSwitch3.isSelected()) {
+            waveTableVisualizer3.getData().removeAll(waveTableVisualizer3.getData());
+            waveTableVisualizer3.getData().add(series[2]);
+            for (int i = 0; i < 100; i++) {
+                series[2].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector3.getValue())));
+            }
+        }
+
+
+
+    }
+
+    double returnVisualizerValue(int i, String waveform){
+
+        switch (waveform) {
+            case "Sine" -> {
+                return 50 * Math.sin(2d * i / 100 * Math.PI);
+            }
+            case "Square" -> {
+                return 50 * Math.signum(Math.sin(2d * i / 100 * Math.PI));
+            }
+            case "Saw" -> {
+                return 50 * (2 * ((i / 100d) - Math.floor(1/2d + i / 100d)));
+            }
+            case "Triangle" -> {
+                return 0;
+            }
+            case "Noise" -> {
+                return 50 * (Math.random() - 0.5);
+            }
+            default -> {
+                System.out.println("Errore scelta wavetable");
+                return -1;
+            }
+        }
+
+
     }
 
 }
