@@ -57,6 +57,8 @@ public class SynthController {
     @FXML private Button activatePresetButton;
     @FXML private Button initPresetButton;
 
+    String[] signalShapes = {"Sine", "Square", "Saw", "Triangle", "Pulse20", "LoFi", "Synthwave", "Noise"};
+
 
     AudioHandler audioHandler;
     MidiHandler midiHandler;
@@ -119,15 +121,15 @@ public class SynthController {
 
     void waveTableSelectorInitialization() {
         WaveTableSelector1.getItems().removeAll(WaveTableSelector1.getItems());
-        WaveTableSelector1.getItems().addAll("Sine", "Square", "Saw", "Triangle", "Noise");
+        WaveTableSelector1.getItems().addAll(signalShapes);
         WaveTableSelector1.getSelectionModel().select("Sine");
 
         WaveTableSelector2.getItems().removeAll(WaveTableSelector2.getItems());
-        WaveTableSelector2.getItems().addAll("Sine", "Square", "Saw", "Triangle", "Noise");
+        WaveTableSelector2.getItems().addAll(signalShapes);
         WaveTableSelector2.getSelectionModel().select("Square");
 
         WaveTableSelector3.getItems().removeAll(WaveTableSelector3.getItems());
-        WaveTableSelector3.getItems().addAll("Sine", "Square", "Saw", "Triangle", "Noise");
+        WaveTableSelector3.getItems().addAll(signalShapes);
         WaveTableSelector3. getSelectionModel().select("Saw");
     }
 
@@ -269,24 +271,25 @@ public class SynthController {
         series[0] = new XYChart.Series<>();
         series[1] = new XYChart.Series<>();
         series[2] = new XYChart.Series<>();
-
+        waveTableVisualizer1.getData().removeAll(waveTableVisualizer1.getData());
+        waveTableVisualizer2.getData().removeAll(waveTableVisualizer2.getData());
+        waveTableVisualizer3.getData().removeAll(waveTableVisualizer3.getData());
 
         if (oscillatorSwitch1.isSelected()) {
-            waveTableVisualizer1.getData().removeAll(waveTableVisualizer1.getData());
             waveTableVisualizer1.getData().add(series[0]);
             for (int i = 0; i < 100; i++) {
                 series[0].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector1.getValue())));
             }
         }
+
         if (oscillatorSwitch2.isSelected()) {
-            waveTableVisualizer2.getData().removeAll(waveTableVisualizer2.getData());
             waveTableVisualizer2.getData().add(series[1]);
             for (int i = 0; i < 100; i++) {
                 series[1].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector2.getValue())));
             }
         }
+
         if (oscillatorSwitch3.isSelected()) {
-            waveTableVisualizer3.getData().removeAll(waveTableVisualizer3.getData());
             waveTableVisualizer3.getData().add(series[2]);
             for (int i = 0; i < 100; i++) {
                 series[2].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector3.getValue())));
@@ -299,28 +302,38 @@ public class SynthController {
 
     double returnVisualizerValue(int i, String waveform){
 
+        double heightMultiplier = 50;
+
         switch (waveform) {
             case "Sine" -> {
-                return 50 * Math.sin(2d * i / 100 * Math.PI);
+                return heightMultiplier * AudioEffects.fuzz(AudioSignals.getSine(i));
             }
             case "Square" -> {
-                return 50 * Math.signum(Math.sin(2d * i / 100 * Math.PI));
+                return heightMultiplier * AudioSignals.getPulse(i, 1/2d);
             }
             case "Saw" -> {
-                return 50 * (2 * ((i / 100d) - Math.floor(1/2d + i / 100d)));
+                return heightMultiplier * AudioSignals.getSaw(i);
             }
             case "Triangle" -> {
-                return 0;
+                return heightMultiplier * AudioSignals.getTriangle(i);
+            }
+            case "Pulse20" -> {
+                return heightMultiplier * AudioSignals.getPulse(i, 2/10d);
+            }
+            case "LoFi" -> {
+                return heightMultiplier * AudioEffects.softClip(AudioSignals.getSine(i));
+            }
+            case "Synthwave" -> {
+                return heightMultiplier * AudioEffects.softClip(AudioSignals.getTriangle(i));
             }
             case "Noise" -> {
-                return 50 * (Math.random() - 0.5);
+                return heightMultiplier * (Math.random() - 0.5);
             }
             default -> {
                 System.out.println("Errore scelta wavetable");
                 return -1;
             }
         }
-
 
     }
 

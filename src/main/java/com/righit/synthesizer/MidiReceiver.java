@@ -22,7 +22,7 @@ public class MidiReceiver implements Receiver {
 
 
 
-        if (message.getMessage().length > 1 /*&& (message.getMessage()[0] == -128 || message.getMessage()[0] == - 112)*/) {
+        if (message.getMessage().length > 1) {
 
             System.out.println(timeStamp);
             for (byte s : message.getMessage()) {
@@ -44,7 +44,7 @@ public class MidiReceiver implements Receiver {
                             nota.setPan(soundProperties.getPans()[i] + (j * Math.pow(-1, j) * soundProperties.getSpread()[i]));
                             nota.setVolume((soundProperties.masterVolume + soundProperties.getVolumes()[i]) / 2 - (j * Math.pow(-1, j) * soundProperties.getBlend()[i]));
                             nota.setWave(soundProperties.waveTable[i]);
-                            nota.setPitch(((double) (message.getMessage()[1] - 69) /12) + (j * Math.pow(-1, j) / 25 * soundProperties.getSpread()[i]));
+                            nota.setPitch(((double) (message.getMessage()[1] - 69) / 12d) + (j * Math.pow(-1, j) / 25 * soundProperties.getSpread()[i]));
 
                             nota.start();
 
