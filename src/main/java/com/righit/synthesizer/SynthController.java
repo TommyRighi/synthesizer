@@ -1,5 +1,7 @@
 package com.righit.synthesizer;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -7,7 +9,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SynthController {
 
@@ -56,13 +62,21 @@ public class SynthController {
     @FXML private Button midiokButton;
     @FXML private Button activatePresetButton;
     @FXML private Button initPresetButton;
+    @FXML private TextField presetName;
+    @FXML private TableColumn<String, SoundProperties> presetColumn;
+    @FXML private TableView<String> presetTable;
+    @FXML private Button minusButton;
+    @FXML private Button plusButton;
 
-    String[] signalShapes = {"Sine", "Square", "Saw", "Triangle", "Pulse20", "LoFi", "Synthwave", "Noise"};
+
+    public final String[] signalShapes = {"Sine", "Square", "Saw", "Triangle", "Pulse20", "LoFi", "Synthwave", "Noise"};
 
 
-    AudioHandler audioHandler;
-    MidiHandler midiHandler;
-    SoundProperties soundProperties;
+    public AudioHandler audioHandler;
+    public MidiHandler midiHandler;
+    public SoundProperties soundProperties;
+    public Map<String, SoundProperties> presets;
+    public ObservableList<String> presetNames;
 
     @FXML
     void initialize() {
@@ -73,8 +87,12 @@ public class SynthController {
         audioInterfaceSelectorInitialization();
         midiInterfaceSelectorInitialization();
 
+        jsnoFileGerenation();
+
+        presets = new HashMap<>();
         soundProperties = new SoundProperties();
         midiHandler.setSoundProperties(soundProperties);
+        presetNames = FXCollections.observableArrayList();
     }
 
 
@@ -136,15 +154,15 @@ public class SynthController {
     void nVoicesSelectorInitialization() {
 
         nVoiceSelector1.getItems().removeAll(nVoiceSelector1.getItems());
-        nVoiceSelector1.getItems().addAll(1, 2, 3 , 4, 5);
+        nVoiceSelector1.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         nVoiceSelector1.getSelectionModel().select(0);
 
         nVoiceSelector2.getItems().removeAll(nVoiceSelector2.getItems());
-        nVoiceSelector2.getItems().addAll(1, 2, 3, 4, 5);
+        nVoiceSelector2.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         nVoiceSelector2.getSelectionModel().select(0);
 
         nVoiceSelector3.getItems().removeAll(nVoiceSelector3.getItems());
-        nVoiceSelector3.getItems().addAll(1, 2, 3, 4, 5);
+        nVoiceSelector3.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         nVoiceSelector3.getSelectionModel().select(0);
 
     }
@@ -235,6 +253,14 @@ public class SynthController {
                 masterAttack.getValue(),
                 masterVolume.getValue()
         );
+
+        if (!presetTable.isVisible()) {
+            presetTable.setVisible(true);
+            plusButton.setVisible(true);
+            minusButton.setVisible(true);
+            presetName.setVisible(true);
+        }
+
         midiHandler.setSoundProperties(soundProperties);
         showSignalWaves();
     }
@@ -263,6 +289,11 @@ public class SynthController {
 
         activatePresetButton.setVisible(false);
         initPresetButton.setVisible(false);
+
+        minusButton.setVisible(false);
+        plusButton.setVisible(false);
+        presetTable.setVisible(false);
+        presetName.setVisible(false);
     }
 
     void showSignalWaves() {
@@ -306,7 +337,7 @@ public class SynthController {
 
         switch (waveform) {
             case "Sine" -> {
-                return heightMultiplier * AudioEffects.fuzz(AudioSignals.getSine(i));
+                return heightMultiplier * AudioSignals.getSine(i);
             }
             case "Square" -> {
                 return heightMultiplier * AudioSignals.getPulse(i, 1/2d);
@@ -337,4 +368,78 @@ public class SynthController {
 
     }
 
+
+
+    void jsnoFileGerenation() {
+
+        String jsonFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\com\\righit\\synthesizer\\synthpresets.json";
+
+        File jsonFile = new File(jsonFilePath);
+
+        boolean created = true;
+
+        if (!jsonFile.exists()) {
+            try {
+                created = jsonFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        if (created) {
+            loadPresets(jsonFile);
+        }
+
+    }
+
+
+
+    void loadPresets(File jsonFile) {
+/*
+        if (jsonFile != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+
+            try {
+                presets = mapper.readValue(jsonFile, new TypeReference<>() {});
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+ */
+
+    }
+
+    @FXML
+    void addPreset(MouseEvent event) {
+        String name = presetName.getText();
+        boolean controll = false;
+
+        while (!controll) {
+            controll = true;
+
+            for (String n : presets.keySet()) {
+                if (n.equals(name)) {
+                    name = name + "_x";
+                    controll = false;
+                }
+            }
+        }
+
+
+        presets.put(name, soundProperties);
+        presetNames.add(name);
+
+        presetTable.setItems(presetNames);
+
+
+    }
+
+    @FXML
+    void removePreset(MouseEvent event) {
+
+    }
 }

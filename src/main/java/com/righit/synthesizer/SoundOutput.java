@@ -45,13 +45,14 @@ public class SoundOutput extends Thread{
 
         byte[] signal = new byte[AudioHandler.BUFFER_SIZE];
         double wavePos = 0;
+        double tDivP;
 
         switch (wave) {
             case "Sine" -> {
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getSine(pitch, wavePos++));
+                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
@@ -61,62 +62,33 @@ public class SoundOutput extends Thread{
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getPulse(pitch, wavePos++, 1/2d));
+                        signal[i] = (byte) (Byte.MAX_VALUE * Math.signum(Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2))));
+
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
             case "Saw" -> {
+                pitch = 100 * pitch;
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getSaw(pitch, wavePos++));
+
+                        signal[i]=  (byte) (Byte.MAX_VALUE * (2 * ((wavePos++ / ((double) AudioHandler.SAMPLE_RATE / pitch)) - Math.floor(1/2d + (i / ((double) AudioHandler.SAMPLE_RATE / pitch))))));
+
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
             case "Triangle" -> {
-                while (isPlaying) {
-                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getTriangle(pitch, wavePos++));
-                    }
-
-                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
-                }
-            }
-            case "Pulse20" -> {
-                while (isPlaying) {
-                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getPulse(pitch, wavePos++, 2/10d));
-                    }
-                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
-                }
-            }
-            case "LoFi" -> {
-                double sample;
-                while (isPlaying) {
-                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        sample = AudioSignals.getSine(pitch, wavePos++);
-                        sample = AudioEffects.softClip(sample);
-
-                        signal[i] = (byte) (sample * Byte.MAX_VALUE);
-                        wavePos++;
-                    }
-                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
-                }
-            }
-            case "Synthwave" -> {
-                double sample;
+                tDivP = (wavePos % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-
-                        sample = AudioSignals.getTriangle(pitch, wavePos++);
-                        sample = AudioEffects.softClip(sample);
-
-                        signal[i] = (byte) (sample * Byte.MAX_VALUE);
+                        signal[i]=  (byte) (Byte.MAX_VALUE *(2 * (2 * Math.abs(tDivP - Math.floor(0.5 + tDivP))) - 1));
+                        tDivP = (wavePos++ % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
