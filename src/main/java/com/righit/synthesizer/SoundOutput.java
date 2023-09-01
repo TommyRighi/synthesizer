@@ -17,6 +17,7 @@ public class SoundOutput extends Thread{
     public double pitch;
     public FloatControl gain;
     public FloatControl panning;
+    public double attack;
 
     SoundOutput(AudioHandler audioHandler, byte note) {
 
@@ -45,14 +46,13 @@ public class SoundOutput extends Thread{
 
         byte[] signal = new byte[AudioHandler.BUFFER_SIZE];
         double wavePos = 0;
-        double tDivP;
 
         switch (wave) {
             case "Sine" -> {
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2)));
+                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getSine(pitch, wavePos++));
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
@@ -62,33 +62,29 @@ public class SoundOutput extends Thread{
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i] = (byte) (Byte.MAX_VALUE * Math.signum(Math.sin((Math.PI * (440 * Math.pow(2, pitch)) / AudioHandler.SAMPLE_RATE * wavePos++ / 2))));
-
+                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getPulse(pitch, wavePos++, 1/2d));
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
             case "Saw" -> {
-                pitch = 100 * pitch;
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
 
-                        signal[i]=  (byte) (Byte.MAX_VALUE * (2 * ((wavePos++ / ((double) AudioHandler.SAMPLE_RATE / pitch)) - Math.floor(1/2d + (i / ((double) AudioHandler.SAMPLE_RATE / pitch))))));
-
+                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getSaw(pitch, wavePos++));
                     }
+
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
             case "Triangle" -> {
-                tDivP = (wavePos % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
                 while (isPlaying) {
 
                     for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
-                        signal[i]=  (byte) (Byte.MAX_VALUE *(2 * (2 * Math.abs(tDivP - Math.floor(0.5 + tDivP))) - 1));
-                        tDivP = (wavePos++ % (double) AudioHandler.SAMPLE_RATE) / (1d / (pitch));
+                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getTriangle(pitch, wavePos++));
                     }
 
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
@@ -103,6 +99,28 @@ public class SoundOutput extends Thread{
                         signal[i] = (byte) random.nextInt();
                     }
 
+
+                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
+                }
+            }
+            case "Pulse20" -> {
+                while (isPlaying) {
+                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
+                        signal[i] = (byte) (Byte.MAX_VALUE * AudioSignals.getPulse(pitch, wavePos++, 2/10d));
+                    }
+                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
+                }
+            }
+            case "LoFi" -> {
+                double sample;
+                while (isPlaying) {
+                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
+                        sample = AudioSignals.getSine(pitch, wavePos++);
+                        sample = AudioEffects.softClip(sample);
+
+                        signal[i] = (byte) (sample * Byte.MAX_VALUE);
+                        wavePos++;
+                    }
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
@@ -114,7 +132,7 @@ public class SoundOutput extends Thread{
                 gain.setValue(gain.getValue() - (gain.getMaximum() - gain.getMinimum() / 2 * AudioHandler.BUFFER_SIZE));
             }
             catch (Exception e) {
-                System.out.println("LMAO");
+                e.printStackTrace();
             }
 
         }
@@ -155,5 +173,8 @@ public class SoundOutput extends Thread{
 
     public void setPitch(double pitch){
         this.pitch = pitch;
+    }
+    public void setAttack(double attack) {
+        this.attack = attack;
     }
 }

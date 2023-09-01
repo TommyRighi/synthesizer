@@ -1,8 +1,11 @@
 package com.righit.synthesizer;
 
+import javafx.beans.property.SimpleStringProperty;
+
 import java.util.Arrays;
 
 public class SoundProperties {
+
 
     public final int N_OSCILLATORS = 3;
     public boolean[] activeOscillators = new boolean[N_OSCILLATORS];
@@ -14,6 +17,7 @@ public class SoundProperties {
     public double[] pans = new double[N_OSCILLATORS];
     public double attack;
     public double masterVolume;
+    public SimpleStringProperty nameOfThePreset;
 
     SoundProperties() {
 
@@ -38,6 +42,19 @@ public class SoundProperties {
 
 
         System.out.println(this);
+    }
+
+    public SoundProperties(SoundProperties soundProperties) {
+        this.activeOscillators = soundProperties.activeOscillators;
+        this.waveTable = soundProperties.waveTable;
+        this.nVoices = soundProperties.nVoices;
+        this.spread = soundProperties.spread;
+        this.blend = soundProperties.blend;
+        this.volumes = soundProperties.volumes;
+        this.pans = soundProperties.pans;
+        this.attack = soundProperties.attack;
+        this.masterVolume = soundProperties.masterVolume;
+        this.nameOfThePreset = soundProperties.nameOfThePreset;
     }
 
     @Override
@@ -77,6 +94,14 @@ public class SoundProperties {
 
     public double[] getPans() {
         return pans;
+    }
+
+    public void setNameOfThePreset(String nameOfThePreset) {
+        this.nameOfThePreset = new SimpleStringProperty(nameOfThePreset);
+    }
+
+    public String getNameOfThePreset() {
+        return nameOfThePreset.get();
     }
 
 }

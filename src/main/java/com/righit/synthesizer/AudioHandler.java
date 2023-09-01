@@ -40,7 +40,7 @@ public class AudioHandler {
         }
 
         //Debugging
-        System.out.println(mixer.getMixerInfo().getName());
+        //System.out.println(mixer.getMixerInfo().getName());
     }
 
 

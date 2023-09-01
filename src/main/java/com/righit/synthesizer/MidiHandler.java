@@ -25,13 +25,12 @@ public class MidiHandler {
         }
 
 
-        byte contatore = 0;
         for (MidiDevice.Info i :midiInfo) {
             try {
                 midiDevice = MidiSystem.getMidiDevice(i);
 
-                System.out.println(contatore++ + ") " +i.getName() + "\n" + i.getDescription() + "\n" + i.getVendor());
-                System.out.println();
+                //System.out.println(contatore++ + ") " +i.getName() + "\n" + i.getDescription() + "\n" + i.getVendor());
+                //System.out.println();
 
             } catch (MidiUnavailableException e) {
                 System.out.println("Device non disponibile");

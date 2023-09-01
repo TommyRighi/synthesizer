@@ -24,12 +24,14 @@ public class MidiReceiver implements Receiver {
 
         if (message.getMessage().length > 1) {
 
+
             System.out.println(timeStamp);
+            /*
             for (byte s : message.getMessage()) {
                 System.out.println(s);
             }
             System.out.println();
-
+            */
 
             if (message.getMessage()[2] != 0) {
 
@@ -45,6 +47,7 @@ public class MidiReceiver implements Receiver {
                             nota.setVolume((soundProperties.masterVolume + soundProperties.getVolumes()[i]) / 2 - (j * Math.pow(-1, j) * soundProperties.getBlend()[i]));
                             nota.setWave(soundProperties.waveTable[i]);
                             nota.setPitch(((double) (message.getMessage()[1] - 69) / 12d) + (j * Math.pow(-1, j) / 25 * soundProperties.getSpread()[i]));
+                            nota.setAttack(soundProperties.attack);
 
                             nota.start();
 

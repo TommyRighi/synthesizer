@@ -7,13 +7,12 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 
-import java.io.File;
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class SynthController {
 
@@ -54,17 +53,18 @@ public class SynthController {
 
 
 
-    @FXML private Slider masterAttack;
+
     @FXML private Slider masterVolume;
     @FXML private ComboBox<String> audioInterfaceSelector;
     @FXML private ComboBox<String> midiInterfaceSelector;
     @FXML private Label midiTextLabel;
     @FXML private Button midiokButton;
     @FXML private Button activatePresetButton;
+    @FXML private Button activateSavedPreset;
     @FXML private Button initPresetButton;
     @FXML private TextField presetName;
     @FXML private TableColumn<String, SoundProperties> presetColumn;
-    @FXML private TableView<String> presetTable;
+    @FXML private TableView<SoundProperties> presetTable;
     @FXML private Button minusButton;
     @FXML private Button plusButton;
 
@@ -75,9 +75,10 @@ public class SynthController {
     public AudioHandler audioHandler;
     public MidiHandler midiHandler;
     public SoundProperties soundProperties;
-    public Map<String, SoundProperties> presets;
-    public ObservableList<String> presetNames;
+    public ObservableList<SoundProperties> observablePresets;
 
+
+    //Inizializzazione di tutti i componenti del controller
     @FXML
     void initialize() {
         audioHandler = new AudioHandler();
@@ -87,21 +88,20 @@ public class SynthController {
         audioInterfaceSelectorInitialization();
         midiInterfaceSelectorInitialization();
 
-        jsnoFileGerenation();
+        tableInirialization();
 
-        presets = new HashMap<>();
         soundProperties = new SoundProperties();
         midiHandler.setSoundProperties(soundProperties);
-        presetNames = FXCollections.observableArrayList();
+
     }
 
 
+    //funzioni di inizializzazione
     void initValues() {
         hideInTheBush();
 
         initPresetValues();
 
-        masterAttackInitialization();
         masterVolumeInitialization();
     }
 
@@ -115,10 +115,6 @@ public class SynthController {
         blendControlInitialization();
         spreadControlInitialization();
 
-    }
-
-    void masterAttackInitialization() {
-        masterAttack.setValue(5);
     }
 
     void masterVolumeInitialization() {
@@ -167,7 +163,6 @@ public class SynthController {
 
     }
 
-
     void oscillatorSwitchInitialization() {
 
         oscillatorSwitch1.setSelected(true);
@@ -190,7 +185,6 @@ public class SynthController {
 
     }
 
-
     void volumeControlInitialization() {
 
         volumeControl1.adjustValue(-5);
@@ -207,6 +201,7 @@ public class SynthController {
 
         audioInterfaceSelector.getItems().removeAll(audioInterfaceSelector.getItems());
         audioInterfaceSelector.getItems().addAll(arrayMixers);
+        audioInterfaceSelector.setValue(arrayMixers.get(1)); //Uno è il Mixer predefinito
     }
 
     void midiInterfaceSelectorInitialization() {
@@ -214,56 +209,9 @@ public class SynthController {
 
         midiInterfaceSelector.getItems().removeAll(midiInterfaceSelector.getItems());
         midiInterfaceSelector.getItems().addAll(arrayMidis);
+        midiInterfaceSelector.setValue(arrayMidis.get(1)); //Uno è il device Midi predefinito
     }
 
-    @FXML void changeMixer(MouseEvent mouseEvent) {
-        String mixerName = audioInterfaceSelector.getSelectionModel().getSelectedItem();
-
-        if (mixerName != "") {
-            audioHandler.setMixer(mixerName);
-
-            if (!midiInterfaceSelector.isVisible()) {
-                midiVisible();
-            }
-        }
-    }
-
-
-    @FXML void changeMidi(MouseEvent event) {
-        String midiName = midiInterfaceSelector.getSelectionModel().getSelectedItem();
-
-        if (midiName != "") {
-            midiHandler.setMidi(midiName);
-
-            if (!initPresetButton.isVisible()) {
-                presetVisible();
-            }
-        }
-    }
-
-    @FXML void update(MouseEvent event) {
-        soundProperties = new SoundProperties(
-                new boolean[] {oscillatorSwitch1.isSelected(), oscillatorSwitch2.isSelected(), oscillatorSwitch3.isSelected()},
-                new String[] {WaveTableSelector1.getSelectionModel().getSelectedItem(), WaveTableSelector2.getSelectionModel().getSelectedItem(), WaveTableSelector3.getSelectionModel().getSelectedItem()},
-                new int[] {nVoiceSelector1.getSelectionModel().getSelectedItem(), nVoiceSelector2.getSelectionModel().getSelectedItem(), nVoiceSelector3.getSelectionModel().getSelectedItem()},
-                new double[] {spreadControl1.getValue(), spreadControl2.getValue(), spreadControl3.getValue()},
-                new double[] {blendControl1.getValue(), blendControl2.getValue(), blendControl3.getValue()},
-                new double[] {volumeControl1.getValue(), volumeControl2.getValue(), volumeControl3.getValue()},
-                new double[] {panControl1.getValue(), panControl2.getValue(), panControl3.getValue()},
-                masterAttack.getValue(),
-                masterVolume.getValue()
-        );
-
-        if (!presetTable.isVisible()) {
-            presetTable.setVisible(true);
-            plusButton.setVisible(true);
-            minusButton.setVisible(true);
-            presetName.setVisible(true);
-        }
-
-        midiHandler.setSoundProperties(soundProperties);
-        showSignalWaves();
-    }
 
     @FXML
     void initPreset(MouseEvent event) {
@@ -294,7 +242,65 @@ public class SynthController {
         plusButton.setVisible(false);
         presetTable.setVisible(false);
         presetName.setVisible(false);
+        activateSavedPreset.setVisible(false);
     }
+
+
+
+    //bottoni per il cambio di mixer audio e source midi
+    @FXML void changeMixer(MouseEvent mouseEvent) {
+        String mixerName = audioInterfaceSelector.getSelectionModel().getSelectedItem();
+
+        if (mixerName != "") {
+            audioHandler.setMixer(mixerName);
+
+            if (!midiInterfaceSelector.isVisible()) {
+                midiVisible();
+            }
+        }
+    }
+
+    @FXML void changeMidi(MouseEvent event) {
+        String midiName = midiInterfaceSelector.getSelectionModel().getSelectedItem();
+
+        if (midiName != "") {
+            midiHandler.setMidi(midiName);
+
+            if (!initPresetButton.isVisible()) {
+                presetVisible();
+            }
+        }
+    }
+
+
+
+    //funzione che aggiorna la finestra e attiava il preset
+    //sotto funzione per la visualizzazione delle onde su schermo
+    @FXML void update(MouseEvent event) {
+        soundProperties = new SoundProperties(
+                new boolean[] {oscillatorSwitch1.isSelected(), oscillatorSwitch2.isSelected(), oscillatorSwitch3.isSelected()},
+                new String[] {WaveTableSelector1.getSelectionModel().getSelectedItem(), WaveTableSelector2.getSelectionModel().getSelectedItem(), WaveTableSelector3.getSelectionModel().getSelectedItem()},
+                new int[] {nVoiceSelector1.getSelectionModel().getSelectedItem(), nVoiceSelector2.getSelectionModel().getSelectedItem(), nVoiceSelector3.getSelectionModel().getSelectedItem()},
+                new double[] {spreadControl1.getValue(), spreadControl2.getValue(), spreadControl3.getValue()},
+                new double[] {blendControl1.getValue(), blendControl2.getValue(), blendControl3.getValue()},
+                new double[] {volumeControl1.getValue(), volumeControl2.getValue(), volumeControl3.getValue()},
+                new double[] {panControl1.getValue(), panControl2.getValue(), panControl3.getValue()},
+                0,
+                masterVolume.getValue()
+        );
+
+        if (!presetTable.isVisible()) {
+            presetTable.setVisible(true);
+            plusButton.setVisible(true);
+            minusButton.setVisible(true);
+            presetName.setVisible(true);
+            activateSavedPreset.setVisible(true);
+        }
+
+        midiHandler.setSoundProperties(soundProperties);
+        showSignalWaves();
+    }
+
 
     void showSignalWaves() {
 
@@ -326,7 +332,6 @@ public class SynthController {
                 series[2].getData().add(new XYChart.Data<>(i, returnVisualizerValue(i, WaveTableSelector3.getValue())));
             }
         }
-
 
 
     }
@@ -370,59 +375,24 @@ public class SynthController {
 
 
 
-    void jsnoFileGerenation() {
 
-        String jsonFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\com\\righit\\synthesizer\\synthpresets.json";
-
-        File jsonFile = new File(jsonFilePath);
-
-        boolean created = true;
-
-        if (!jsonFile.exists()) {
-            try {
-                created = jsonFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        if (created) {
-            loadPresets(jsonFile);
-        }
-
-    }
-
-
-
-    void loadPresets(File jsonFile) {
-/*
-        if (jsonFile != null) {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(new JavaTimeModule());
-
-            try {
-                presets = mapper.readValue(jsonFile, new TypeReference<>() {});
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
- */
-
-    }
-
+    //Gestione dei preset
     @FXML
     void addPreset(MouseEvent event) {
+
         String name = presetName.getText();
+
+        if (name.equals("")) {
+            return;
+        }
+
         boolean controll = false;
 
         while (!controll) {
             controll = true;
 
-            for (String n : presets.keySet()) {
-                if (n.equals(name)) {
+            for (SoundProperties n : observablePresets) {
+                if (n.getNameOfThePreset().equals(name)) {
                     name = name + "_x";
                     controll = false;
                 }
@@ -430,16 +400,85 @@ public class SynthController {
         }
 
 
-        presets.put(name, soundProperties);
-        presetNames.add(name);
-
-        presetTable.setItems(presetNames);
-
+        soundProperties.setNameOfThePreset(name);
+        observablePresets.add(new SoundProperties(soundProperties));
 
     }
 
     @FXML
     void removePreset(MouseEvent event) {
 
+        try {
+            int selectedIndex = selectedIndex();
+            presetTable.getItems().remove(selectedIndex);
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    void activateSavedPreset(MouseEvent event) {
+
+        int selectedIndex = selectedIndex();
+        SoundProperties selected = presetTable.getItems().get(selectedIndex);
+
+        setWindowValues(selected);
+
+        midiHandler.setSoundProperties(selected);
+        showSignalWaves();
+
+    }
+
+    void setWindowValues(SoundProperties selected) {
+
+        oscillatorSwitch1.setSelected(selected.activeOscillators[0]);
+        oscillatorSwitch2.setSelected(selected.activeOscillators[1]);
+        oscillatorSwitch3.setSelected(selected.activeOscillators[2]);
+
+        masterVolume.setValue(selected.masterVolume);
+
+        nVoiceSelector1.setValue(selected.nVoices[0]);
+        nVoiceSelector2.setValue(selected.nVoices[1]);
+        nVoiceSelector3.setValue(selected.nVoices[2]);
+
+        blendControl1.setValue(selected.blend[0]);
+        blendControl2.setValue(selected.blend[1]);
+        blendControl3.setValue(selected.blend[2]);
+
+        panControl1.setValue(selected.pans[0]);
+        panControl2.setValue(selected.pans[1]);
+        panControl3.setValue(selected.pans[2]);
+
+        spreadControl1.setValue(selected.spread[0]);
+        spreadControl2.setValue(selected.spread[1]);
+        spreadControl3.setValue(selected.spread[2]);
+
+        volumeControl1.setValue(selected.volumes[0]);
+        volumeControl2.setValue(selected.volumes[1]);
+        volumeControl3.setValue(selected.volumes[2]);
+
+        WaveTableSelector1.setValue(selected.waveTable[0]);
+        WaveTableSelector2.setValue(selected.waveTable[1]);
+        WaveTableSelector3.setValue(selected.waveTable[2]);
+        showSignalWaves();
+
+    }
+
+    int selectedIndex() {
+        int selectedIndex = presetTable.getSelectionModel().getSelectedIndex();
+        if (selectedIndex < 0) {
+            throw new NoSuchElementException();
+        }
+        return selectedIndex;
+    }
+
+
+    void tableInirialization() {
+        observablePresets = FXCollections.observableArrayList();
+
+        presetColumn.setCellValueFactory(new PropertyValueFactory<>("nameOfThePreset"));
+
+        presetTable.setItems(observablePresets);
     }
 }
