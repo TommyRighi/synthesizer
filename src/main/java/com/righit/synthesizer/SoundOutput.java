@@ -124,6 +124,19 @@ public class SoundOutput extends Thread{
                     sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
                 }
             }
+            case "Synthwave" -> {
+                double sample;
+                while (isPlaying) {
+                    for (int i = 0; i < AudioHandler.BUFFER_SIZE; i++) {
+                        sample = AudioSignals.getTriangle(pitch, wavePos++);
+                        sample = AudioEffects.softClip(sample);
+
+                        signal[i] = (byte) (sample * Byte.MAX_VALUE);
+                        wavePos++;
+                    }
+                    sourceLine.write(signal, 0, AudioHandler.BUFFER_SIZE);
+                }
+            }
             default -> System.out.println("Errore nella selezione wavetable");
         }
 
